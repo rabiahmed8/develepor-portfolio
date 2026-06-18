@@ -1,26 +1,82 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0b0f19;
+  --foreground: #f8fafc;
+  --card-bg: rgba(21, 28, 44, 0.6);
+  --card-border: rgba(16, 185, 129, 0.15);
+  --accent: #10b981;
+  --accent-glow: rgba(16, 185, 129, 0.2);
+  --accent-secondary: #06b6d4;
+  --muted: #94a3b8;
+  --muted-dark: #1e293b;
+  --terminal-bg: #070a13;
+  --terminal-border: rgba(16, 185, 129, 0.1);
+  --syntax-keyword: #f43f5e;
+  --syntax-string: #34d399;
+  --syntax-number: #fb923c;
+  --syntax-comment: #64748b;
+  --syntax-function: #38bdf8;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card-bg: var(--card-bg);
+  --color-card-border: var(--card-border);
+  --color-accent: var(--accent);
+  --color-accent-glow: var(--accent-glow);
+  --color-accent-secondary: var(--accent-secondary);
+  --color-muted-text: var(--muted);
+  --color-muted-dark: var(--muted-dark);
+  --color-terminal-bg: var(--terminal-bg);
+  --color-terminal-border: var(--terminal-border);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans);
+  overflow-x: hidden;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(16, 185, 129, 0.2);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(16, 185, 129, 0.4);
+}
+
+/* Custom glassmorphism blur */
+.glassmorphism {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+}
+
+/* Terminal input cursor simulation */
+.terminal-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 15px;
+  background-color: var(--accent);
+  animation: blink 1s step-end infinite;
+  vertical-align: middle;
+}
+
+@keyframes blink {
+  from, to { background-color: transparent }
+  50% { background-color: var(--accent) }
 }
