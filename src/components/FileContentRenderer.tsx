@@ -6,13 +6,28 @@ import {
   CheckCircle2,
   MapPin,
   Mail,
-  Phone,
   Send,
   Code2,
-  Terminal
+  Terminal,
+  Briefcase,
+  Calendar,
+  Building2,
+  Copy,
+  Check,
+  Award,
+  Lock,
+  Globe
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Project, SkillGroup, aboutMe, skills, projects, contactInfo } from "../data/portfolioData";
+import { ResumeDocument } from "./ResumeDocument";
+import {
+  aboutMe,
+  skills,
+  projects,
+  contactInfo,
+  workExperience,
+  resumeData
+} from "../data/portfolioData";
 
 const GithubIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -29,6 +44,22 @@ const GithubIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+const LinkedinIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth="2"
+    fill="none"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+    <rect x="2" y="9" width="4" height="12" />
+    <circle cx="4" cy="4" r="2" />
+  </svg>
+);
+
 interface FileContentRendererProps {
   fileId: string;
 }
@@ -36,7 +67,7 @@ interface FileContentRendererProps {
 // Simple Custom Code Highlighter Utility
 const highlightCode = (code: string, lang: string) => {
   if (!code) return [];
-  
+
   const lines = code.split("\n");
   return lines.map((line, idx) => {
     // Escape HTML to prevent injection issues
@@ -46,16 +77,16 @@ const highlightCode = (code: string, lang: string) => {
       .replace(/>/g, "&gt;");
 
     // Syntax rules
-    if (lang === "json" || lang === "typescript" || lang === "yaml" || lang === "javascript") {
+    if (lang === "json" || lang === "typescript" || lang === "yaml" || lang === "javascript" || lang === "markdown") {
       // 1. Comments (grey)
       escaped = escaped.replace(/(\/\/.*)$/g, '<span class="text-[#64748b] font-normal italic">$1</span>');
-      
+
       // 2. Strings (green/mint)
       escaped = escaped.replace(/(["'`])(.*?)\1/g, '<span class="text-[#34d399]">$1$2$1</span>');
 
       // 3. Keywords (pink)
       const keywords = [
-        "const", "let", "var", "function", "class", "export", "import", "from", 
+        "const", "let", "var", "function", "class", "export", "import", "from",
         "return", "await", "async", "interface", "private", "public", "extends",
         "implements", "type", "string", "number", "boolean", "new"
       ];
@@ -72,8 +103,10 @@ const highlightCode = (code: string, lang: string) => {
         escaped = escaped.replace(/^(\s*)([\w-]+)(:)/g, '$1<span class="text-[#38bdf8]">$2</span>$3');
       } else if (lang === "json") {
         escaped = escaped.replace(/(["'])(.*?)\1(\s*:)/g, '<span class="text-[#38bdf8]">$1$2$1</span>$3');
+      } else if (lang === "markdown") {
+        escaped = escaped.replace(/^(#+\s.*)$/g, '<span class="text-[#38bdf8] font-bold">$1</span>');
       }
-      
+
       // 6. Numbers (orange)
       escaped = escaped.replace(/\b(\d+)\b/g, '<span class="text-[#fb923c]">$1</span>');
     }
@@ -94,6 +127,17 @@ export const FileContentRenderer: React.FC<FileContentRendererProps> = ({ fileId
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [activeView, setActiveView] = useState<"visual" | "code">("visual");
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyCode = async (code: string) => {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // ignore
+    }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -103,9 +147,8 @@ export const FileContentRenderer: React.FC<FileContentRendererProps> = ({ fileId
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) return;
-    
+
     setSubmitting(true);
-    // Call our actual API Route
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
@@ -126,15 +169,61 @@ export const FileContentRenderer: React.FC<FileContentRendererProps> = ({ fileId
     }
   };
 
+  const resumeMarkdown = `# ${resumeData.name}
+**${resumeData.role}** | ${resumeData.location}
+Email: ${resumeData.email} | GitHub: ${resumeData.github} | LinkedIn: ${resumeData.linkedin}
+
+---
+
+## Professional Summary
+${resumeData.summary}
+
+---
+
+## Technical Skills
+- **Programming Languages**: JavaScript (ES6+), TypeScript, Python (academic), c++ (academic)
+- **Frontend**: React.js, Next.js, Tailwind CSS, HTML5, CSS3, shadcn/ui, Ant Design
+- **Backend**: Node.js, Express.js, Next.js API Routes, RESTful APIs, Authentication
+- **Databases & ORMs**: PostgreSQL (neon db, Supabase), MySQL, Prisma ORM, TypeORM
+- **Dev Tools & Workflow**: Git & GitHub, VS Code, Postman, Vercel, Figma
+
+---
+
+## Work Experience
+${workExperience.map((exp) => `### ${exp.role} - ${exp.company} (${exp.period})
+*${exp.location} | ${exp.type}*
+- ${exp.description}
+${exp.highlights.map((hl) => `  * ${hl}`).join("\n")}
+**Technologies:** ${exp.technologies.join(", ")}
+`).join("\n")}
+
+---
+
+## Education
+${resumeData.education.map((edu) => `### ${edu.institution} - ${edu.degree} (${edu.period})
+${edu.highlights?.map((hl) => `- ${hl}`).join("\n")}
+`).join("\n")}
+`;
+
   // Helper to render Code Editor Panel
   const renderEditorPanel = (code: string, language: string, filename: string) => {
     return (
       <div className="flex-1 flex flex-col h-full bg-[#070a13] rounded-lg border border-card-border overflow-hidden">
         <div className="px-4 py-2 bg-[#05080f] border-b border-card-border flex items-center justify-between text-slate-400 select-none text-[11px] font-mono">
-          <span>{filename}</span>
-          <span className="text-[10px] bg-slate-800/60 text-slate-400 px-1.5 py-0.5 rounded font-mono uppercase">
-            {language}
-          </span>
+          <span className="font-semibold text-slate-300">{filename}</span>
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={() => handleCopyCode(code)}
+              className="flex items-center space-x-1 px-2.5 py-1 rounded bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors text-[10px]"
+              title="Copy code to clipboard"
+            >
+              {copied ? <Check size={11} className="text-accent" /> : <Copy size={11} />}
+              <span>{copied ? "Copied!" : "Copy"}</span>
+            </button>
+            <span className="text-[10px] bg-slate-800/60 text-slate-400 px-1.5 py-0.5 rounded font-mono uppercase">
+              {language}
+            </span>
+          </div>
         </div>
         <div className="flex-1 overflow-auto p-4 font-mono text-xs leading-5">
           <div className="table w-full">
@@ -146,18 +235,21 @@ export const FileContentRenderer: React.FC<FileContentRendererProps> = ({ fileId
   };
 
   return (
-    <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#0b0f19]">
-      {/* Visual / Code Toggle */}
-      <div className="px-6 py-2 border-b border-card-border/60 flex items-center justify-between bg-[#080d1a]">
-        <h2 className="text-sm font-semibold tracking-wide text-slate-200 font-mono">
-          {fileId}
-        </h2>
+    <div className="workspace-renderer-root flex-1 flex flex-col h-full overflow-hidden bg-[#0b0f19]">
+      {/* Visual / Code Toggle Bar */}
+      <div className="no-print px-6 py-2.5 border-b border-card-border/60 flex items-center justify-between bg-[#080d1a]">
+        <div className="flex items-center space-x-2">
+          <span className="w-2 h-2 rounded-full bg-accent/80" />
+          <h2 className="text-xs font-semibold tracking-wide text-slate-200 font-mono">
+            {fileId}
+          </h2>
+        </div>
         <div className="flex items-center space-x-1 bg-slate-900 border border-card-border/40 p-0.5 rounded-md text-[11px] font-mono">
           <button
             onClick={() => setActiveView("visual")}
             className={`px-3 py-1 rounded transition-colors ${
               activeView === "visual"
-                ? "bg-accent/15 text-accent font-semibold"
+                ? "bg-accent/15 text-accent font-semibold shadow-[0_0_8px_rgba(16,185,129,0.25)]"
                 : "text-slate-400 hover:text-slate-200"
             }`}
           >
@@ -167,7 +259,7 @@ export const FileContentRenderer: React.FC<FileContentRendererProps> = ({ fileId
             onClick={() => setActiveView("code")}
             className={`px-3 py-1 rounded transition-colors ${
               activeView === "code"
-                ? "bg-accent/15 text-accent font-semibold"
+                ? "bg-accent/15 text-accent font-semibold shadow-[0_0_8px_rgba(16,185,129,0.25)]"
                 : "text-slate-400 hover:text-slate-200"
             }`}
           >
@@ -177,7 +269,7 @@ export const FileContentRenderer: React.FC<FileContentRendererProps> = ({ fileId
       </div>
 
       {/* Main Panel Content */}
-      <div className="flex-1 overflow-y-auto p-6 md:p-8">
+      <div className="workspace-scroll-container flex-1 overflow-y-auto p-6 md:p-8">
         <AnimatePresence mode="wait">
           {activeView === "code" ? (
             <motion.div
@@ -202,9 +294,14 @@ export const skills: { category: string; items: Skill[] }[] = ${JSON.stringify(s
                   "typescript",
                   "skills.ts"
                 )}
+              {fileId === "experience.json" &&
+                renderEditorPanel(JSON.stringify(workExperience, null, 2), "json", "experience.json")}
+              {fileId === "resume.md" &&
+                renderEditorPanel(resumeMarkdown, "markdown", "resume.md")}
               {fileId === "contact_info.yaml" &&
                 renderEditorPanel(
                   `contact:
+  name: "${contactInfo.email}"
   email: "${contactInfo.email}"
   phone: "${contactInfo.phone}"
   location: "${contactInfo.location}"
@@ -214,7 +311,7 @@ export const skills: { category: string; items: Skill[] }[] = ${JSON.stringify(s
                   "yaml",
                   "contact_info.yaml"
                 )}
-              {fileId.endsWith(".md") && (() => {
+              {fileId.endsWith(".md") && fileId !== "resume.md" && (() => {
                 const proj = projects.find((p) => `${p.id}.md` === fileId);
                 return proj
                   ? renderEditorPanel(proj.codeSnippet, proj.codeLanguage, `${proj.id}.${proj.codeLanguage === "typescript" ? "ts" : "js"}`)
@@ -235,39 +332,53 @@ export const skills: { category: string; items: Skill[] }[] = ${JSON.stringify(s
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
                   <div className="lg:col-span-3 space-y-6">
                     <div className="glassmorphism p-6 rounded-xl relative overflow-hidden">
-                      <div className="absolute top-0 right-0 w-24 h-24 bg-accent/5 rounded-full blur-xl" />
-                      <span className="text-xs font-mono text-accent font-semibold tracking-wider uppercase block mb-1">
-                        System Architect
-                      </span>
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-accent/10 rounded-full blur-2xl" />
+                      <div className="flex items-center space-x-2 mb-2">
+                        <span className="text-xs font-mono text-accent font-semibold tracking-wider uppercase">
+                          System Architect & Engineer
+                        </span>
+                        <span className="text-[10px] bg-slate-800 text-slate-400 font-mono px-2 py-0.5 rounded">
+                          {contactInfo.location}
+                        </span>
+                      </div>
                       <h1 className="text-3xl font-extrabold tracking-tight text-white mb-2">
                         {aboutMe.name}
                       </h1>
                       <p className="text-slate-300 leading-relaxed text-sm mb-4">
                         {aboutMe.bio}
                       </p>
+                      <div className="flex items-center space-x-3 text-xs font-mono text-slate-400 pt-2 border-t border-card-border/50">
+                        <span className="flex items-center space-x-1">
+                          <MapPin size={13} className="text-accent" />
+                          <span>{contactInfo.location}</span>
+                        </span>
+                        <span className="text-slate-600">|</span>
+                        <span className="text-accent font-medium">Open for Opportunities</span>
+                      </div>
                     </div>
 
                     {/* Quick Highlights */}
                     <div className="glassmorphism p-6 rounded-xl">
-                      <h3 className="text-sm font-semibold text-slate-200 mb-4 uppercase tracking-wider font-mono">
-                        Key Competencies
+                      <h3 className="text-sm font-semibold text-slate-200 mb-4 uppercase tracking-wider font-mono flex items-center space-x-2">
+                        <Award size={15} className="text-accent" />
+                        <span>Core Engineering Principles</span>
                       </h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono text-slate-300">
-                        <div className="flex items-center space-x-2">
-                          <CheckCircle2 size={14} className="text-accent" />
+                        <div className="flex items-center space-x-2 p-2 rounded bg-slate-900/40 border border-slate-800/60">
+                          <CheckCircle2 size={14} className="text-accent shrink-0" />
                           <span>Component-Driven Architecture</span>
                         </div>
-                        <div className="flex items-center space-x-2">
-                          <CheckCircle2 size={14} className="text-accent" />
-                          <span>Relational DB Modeling & ORMs</span>
+                        <div className="flex items-center space-x-2 p-2 rounded bg-slate-900/40 border border-slate-800/60">
+                          <CheckCircle2 size={14} className="text-accent shrink-0" />
+                          <span>Relational DB Modeling & Prisma</span>
                         </div>
-                        <div className="flex items-center space-x-2">
-                          <CheckCircle2 size={14} className="text-accent" />
-                          <span>RESTful API Contract Design</span>
+                        <div className="flex items-center space-x-2 p-2 rounded bg-slate-900/40 border border-slate-800/60">
+                          <CheckCircle2 size={14} className="text-accent shrink-0" />
+                          <span>High-Throughput RESTful & WS APIs</span>
                         </div>
-                        <div className="flex items-center space-x-2">
-                          <CheckCircle2 size={14} className="text-accent" />
-                          <span>Automated Testing & Pipelines</span>
+                        <div className="flex items-center space-x-2 p-2 rounded bg-slate-900/40 border border-slate-800/60">
+                          <CheckCircle2 size={14} className="text-accent shrink-0" />
+                          <span>Automated Testing & CI/CD Pipelines</span>
                         </div>
                       </div>
                     </div>
@@ -278,7 +389,7 @@ export const skills: { category: string; items: Skill[] }[] = ${JSON.stringify(s
                     {Object.entries(aboutMe.stats).map(([key, val]) => (
                       <div
                         key={key}
-                        className="glassmorphism p-4 rounded-xl flex flex-col justify-between hover:border-accent/40 transition-colors group"
+                        className="glassmorphism p-5 rounded-xl flex flex-col justify-between hover:border-accent/40 transition-colors group"
                       >
                         <span className="text-xs uppercase tracking-wider text-slate-500 font-mono">
                           {key}
@@ -307,7 +418,7 @@ export const skills: { category: string; items: Skill[] }[] = ${JSON.stringify(s
                             <div key={skill.name} className="space-y-1.5">
                               <div className="flex justify-between text-xs font-mono text-slate-300">
                                 <span>{skill.name}</span>
-                                <span className="text-accent/80">{skill.level}%</span>
+                                <span className="text-accent/80 font-semibold">{skill.level}%</span>
                               </div>
                               <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden border border-slate-800">
                                 <motion.div
@@ -326,8 +437,106 @@ export const skills: { category: string; items: Skill[] }[] = ${JSON.stringify(s
                 </div>
               )}
 
+              {/* RENDER: WORK EXPERIENCE */}
+              {fileId === "experience.json" && (
+                <div className="space-y-6">
+                  <div className="glassmorphism p-6 rounded-xl flex items-center justify-between">
+                    <div>
+                      <h2 className="text-lg font-bold text-white font-mono flex items-center space-x-2">
+                        <Briefcase size={18} className="text-accent" />
+                        <span>Professional Work History</span>
+                      </h2>
+                      <p className="text-xs text-slate-400 mt-1">
+                        Timeline of production roles, full-stack achievements, and technical contributions.
+                      </p>
+                    </div>
+                    <span className="text-[11px] font-mono bg-accent/10 border border-accent/20 text-accent px-2.5 py-1 rounded-full">
+                      3+ Years Experience
+                    </span>
+                  </div>
+
+                  {/* Timeline */}
+                  <div className="relative pl-6 border-l-2 border-slate-800 space-y-8">
+                    {workExperience.map((item) => (
+                      <div key={item.id} className="relative group">
+                        {/* Timeline Node */}
+                        <div className="absolute -left-[31px] top-1.5 w-3.5 h-3.5 rounded-full bg-[#080d1a] border-2 border-accent group-hover:bg-accent transition-colors shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
+
+                        <div className="glassmorphism p-6 rounded-xl space-y-4 hover:border-accent/40 transition-colors">
+                          <div className="flex flex-wrap items-start justify-between gap-2 border-b border-card-border/50 pb-3">
+                            <div>
+                              <h3 className="text-base font-bold text-white tracking-wide">
+                                {item.role}
+                              </h3>
+                              <div className="flex items-center space-x-3 text-xs font-mono text-slate-400 mt-1">
+                                <span className="flex items-center space-x-1 text-slate-300">
+                                  <Building2 size={13} className="text-accent" />
+                                  <span>{item.company}</span>
+                                </span>
+                                <span>•</span>
+                                <span className="flex items-center space-x-1">
+                                  <MapPin size={13} className="text-slate-500" />
+                                  <span>{item.location}</span>
+                                </span>
+                              </div>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <span className="text-[10px] font-mono bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">
+                                {item.type}
+                              </span>
+                              <span className="text-xs font-mono text-accent flex items-center space-x-1 bg-accent/10 px-2.5 py-0.5 rounded-full border border-accent/20">
+                                <Calendar size={12} />
+                                <span>{item.period}</span>
+                              </span>
+                            </div>
+                          </div>
+
+                          <p className="text-xs text-slate-300 leading-relaxed">
+                            {item.description}
+                          </p>
+
+                          {/* Highlights */}
+                          <div className="space-y-2">
+                            <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold block">
+                              Key Deliverables & Achievements:
+                            </span>
+                            <ul className="space-y-2">
+                              {item.highlights.map((hl, i) => (
+                                <li key={i} className="flex items-start space-x-2.5 text-xs text-slate-300">
+                                  <CheckCircle2 size={13} className="text-accent mt-0.5 shrink-0" />
+                                  <span>{hl}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          {/* Tech pills */}
+                          <div className="flex flex-wrap gap-1.5 pt-2">
+                            {item.technologies.map((tech) => (
+                              <span
+                                key={tech}
+                                className="px-2 py-0.5 text-[10px] font-mono bg-slate-900 border border-slate-800 text-slate-300 rounded"
+                              >
+                                {tech}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* RENDER: RESUME */}
+              {fileId === "resume.md" && (
+                <div className="w-full flex justify-center pb-8">
+                  <ResumeDocument showControls={true} />
+                </div>
+              )}
+
               {/* RENDER: PROJECTS */}
-              {fileId.endsWith(".md") && (() => {
+              {fileId.endsWith(".md") && fileId !== "resume.md" && (() => {
                 const proj = projects.find((p) => `${p.id}.md` === fileId);
                 if (!proj) return <div className="text-slate-400 font-mono">Project not found</div>;
                 return (
@@ -344,10 +553,11 @@ export const skills: { category: string; items: Skill[] }[] = ${JSON.stringify(s
                         <p className="text-slate-300 leading-relaxed text-sm mb-6">
                           {proj.description}
                         </p>
-                        
-                        {/* Links */}
-                        <div className="flex flex-wrap gap-3">
-                          {proj.demoUrl && (
+
+                        {/* Links & Availability Statuses */}
+                        <div className="flex flex-wrap items-center gap-3">
+                          {/* Live Demo Link or Status */}
+                          {proj.demoUrl ? (
                             <a
                               href={proj.demoUrl}
                               target="_blank"
@@ -357,8 +567,32 @@ export const skills: { category: string; items: Skill[] }[] = ${JSON.stringify(s
                               <ExternalLink size={14} className="mr-1.5" />
                               Live Demo
                             </a>
-                          )}
-                          {proj.githubUrl && (
+                          ) : proj.demoStatus === "internal" ? (
+                            <div
+                              className="group relative inline-flex items-center px-3.5 py-2 bg-slate-900/90 border border-slate-800 text-slate-400 font-mono text-xs rounded cursor-help"
+                              title={proj.demoNote || "Enterprise internal system - private deployment"}
+                            >
+                              <Building2 size={13} className="mr-1.5 text-slate-500" />
+                              <span>Internal Deployment</span>
+                              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block px-2.5 py-1 bg-slate-950 border border-slate-700 text-[11px] text-slate-300 rounded shadow-xl whitespace-nowrap z-30 pointer-events-none">
+                                {proj.demoNote || "Enterprise internal system - private deployment"}
+                              </div>
+                            </div>
+                          ) : proj.demoStatus === "offline" ? (
+                            <div
+                              className="group relative inline-flex items-center px-3.5 py-2 bg-slate-900/90 border border-slate-800 text-slate-400 font-mono text-xs rounded cursor-help"
+                              title={proj.demoNote || "Demo currently offline / archived"}
+                            >
+                              <Globe size={13} className="mr-1.5 text-slate-500" />
+                              <span>Demo Offline</span>
+                              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block px-2.5 py-1 bg-slate-950 border border-slate-700 text-[11px] text-slate-300 rounded shadow-xl whitespace-nowrap z-30 pointer-events-none">
+                                {proj.demoNote || "Demo currently offline / archived"}
+                              </div>
+                            </div>
+                          ) : null}
+
+                          {/* GitHub Repo Link or Private Badge */}
+                          {proj.githubUrl ? (
                             <a
                               href={proj.githubUrl}
                               target="_blank"
@@ -368,7 +602,18 @@ export const skills: { category: string; items: Skill[] }[] = ${JSON.stringify(s
                               <GithubIcon className="w-3.5 h-3.5 mr-1.5" />
                               GitHub Repo
                             </a>
-                          )}
+                          ) : proj.isRepoPrivate ? (
+                            <div
+                              className="group relative inline-flex items-center px-3.5 py-2 bg-slate-900/90 border border-slate-800 text-slate-400 font-mono text-xs rounded cursor-help"
+                              title={proj.repoNote || "Proprietary client/company repository (private)"}
+                            >
+                              <Lock size={13} className="mr-1.5 text-amber-400/80" />
+                              <span>Private Repo</span>
+                              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block px-2.5 py-1 bg-slate-950 border border-slate-700 text-[11px] text-slate-300 rounded shadow-xl whitespace-nowrap z-30 pointer-events-none">
+                                {proj.repoNote || "Proprietary client/company repository (private)"}
+                              </div>
+                            </div>
+                          ) : null}
                         </div>
                       </div>
 
@@ -417,7 +662,7 @@ export const skills: { category: string; items: Skill[] }[] = ${JSON.stringify(s
                     <h3 className="text-sm font-semibold text-slate-200 font-mono mb-4 border-b border-card-border pb-2">
                       Send a Message
                     </h3>
-                    
+
                     {formSubmitted ? (
                       <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
@@ -441,7 +686,7 @@ export const skills: { category: string; items: Skill[] }[] = ${JSON.stringify(s
                               value={formData.name}
                               onChange={handleInputChange}
                               required
-                              placeholder="John Doe"
+                              placeholder="Your Name"
                               className="w-full px-3 py-2 bg-slate-900 border border-card-border/40 focus:border-accent text-white rounded outline-none transition-colors"
                             />
                           </div>
@@ -453,7 +698,7 @@ export const skills: { category: string; items: Skill[] }[] = ${JSON.stringify(s
                               value={formData.email}
                               onChange={handleInputChange}
                               required
-                              placeholder="john@example.com"
+                              placeholder="name@example.com"
                               className="w-full px-3 py-2 bg-slate-900 border border-card-border/40 focus:border-accent text-white rounded outline-none transition-colors"
                             />
                           </div>
@@ -466,7 +711,7 @@ export const skills: { category: string; items: Skill[] }[] = ${JSON.stringify(s
                             value={formData.message}
                             onChange={handleInputChange}
                             required
-                            placeholder="Hello, I would love to connect about an opportunity..."
+                            placeholder="Hello Rabi, I would love to discuss a project or collaboration..."
                             className="w-full px-3 py-2 bg-slate-900 border border-card-border/40 focus:border-accent text-white rounded outline-none transition-colors resize-none"
                           />
                         </div>
@@ -485,35 +730,57 @@ export const skills: { category: string; items: Skill[] }[] = ${JSON.stringify(s
                   {/* Sidebar Info Cards */}
                   <div className="lg:col-span-2 space-y-4 font-mono text-xs">
                     <div className="glassmorphism p-5 rounded-xl flex items-center space-x-4">
-                      <div className="w-10 h-10 rounded bg-accent/15 border border-accent/30 flex items-center justify-center text-accent">
+                      <div className="w-10 h-10 rounded bg-accent/15 border border-accent/30 flex items-center justify-center text-accent shrink-0">
                         <Mail size={16} />
                       </div>
-                      <div>
+                      <div className="overflow-hidden">
                         <span className="text-[10px] uppercase tracking-wider text-slate-500">Email Address</span>
-                        <a href={`mailto:${contactInfo.email}`} className="text-sm font-semibold text-slate-200 block hover:text-accent transition-colors mt-0.5">
+                        <a href={`mailto:${contactInfo.email}`} className="text-sm font-semibold text-slate-200 block hover:text-accent transition-colors mt-0.5 truncate">
                           {contactInfo.email}
                         </a>
                       </div>
                     </div>
 
                     <div className="glassmorphism p-5 rounded-xl flex items-center space-x-4">
-                      <div className="w-10 h-10 rounded bg-accent/15 border border-accent/30 flex items-center justify-center text-accent">
-                        <Phone size={16} />
+                      <div className="w-10 h-10 rounded bg-accent/15 border border-accent/30 flex items-center justify-center text-accent shrink-0">
+                        <LinkedinIcon className="w-4 h-4" />
                       </div>
-                      <div>
-                        <span className="text-[10px] uppercase tracking-wider text-slate-500">Direct Line</span>
-                        <span className="text-sm font-semibold text-slate-200 block mt-0.5">
-                          {contactInfo.phone}
-                        </span>
+                      <div className="overflow-hidden">
+                        <span className="text-[10px] uppercase tracking-wider text-slate-500">LinkedIn Profile</span>
+                        <a
+                          href={contactInfo.linkedin}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-xs font-semibold text-slate-200 block hover:text-accent transition-colors mt-0.5 truncate"
+                        >
+                          linkedin.com/in/rabi-ahmed
+                        </a>
                       </div>
                     </div>
 
                     <div className="glassmorphism p-5 rounded-xl flex items-center space-x-4">
-                      <div className="w-10 h-10 rounded bg-accent/15 border border-accent/30 flex items-center justify-center text-accent">
+                      <div className="w-10 h-10 rounded bg-accent/15 border border-accent/30 flex items-center justify-center text-accent shrink-0">
+                        <GithubIcon className="w-4 h-4" />
+                      </div>
+                      <div className="overflow-hidden">
+                        <span className="text-[10px] uppercase tracking-wider text-slate-500">GitHub Profile</span>
+                        <a
+                          href={contactInfo.github}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-xs font-semibold text-slate-200 block hover:text-accent transition-colors mt-0.5 truncate"
+                        >
+                          github.com/rabiahmed8
+                        </a>
+                      </div>
+                    </div>
+
+                    <div className="glassmorphism p-5 rounded-xl flex items-center space-x-4">
+                      <div className="w-10 h-10 rounded bg-accent/15 border border-accent/30 flex items-center justify-center text-accent shrink-0">
                         <MapPin size={16} />
                       </div>
                       <div>
-                        <span className="text-[10px] uppercase tracking-wider text-slate-500">Location Base</span>
+                        <span className="text-[10px] uppercase tracking-wider text-slate-500">Location</span>
                         <span className="text-sm font-semibold text-slate-200 block mt-0.5">
                           {contactInfo.location}
                         </span>

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { terminalResponses } from "../data/portfolioData";
+import { terminalResponses, projects } from "../data/portfolioData";
 
 interface CommandTerminalProps {
   onOpenFile: (fileId: string) => void;
@@ -81,7 +81,7 @@ export const CommandTerminal: React.FC<CommandTerminalProps> = ({ onOpenFile }) 
     if (contactStep !== "idle") {
       if (contactStep === "name") {
         setContactData((prev) => ({ ...prev, name: rawInput }));
-        setHistory((prev) => [...prev, { type: "output", text: `Name recorded. Please enter your email:` }]);
+        setHistory((prev) => [...prev, { type: "output", text: "Name recorded. Please enter your email:" }]);
         setContactStep("email");
       } else if (contactStep === "email") {
         if (!rawInput.includes("@")) {
@@ -110,10 +110,10 @@ export const CommandTerminal: React.FC<CommandTerminalProps> = ({ onOpenFile }) 
           } else {
             setHistory((prev) => [
               ...prev,
-              { type: "error", text: "ERROR: API route responded with error. Please try email direct." }
+              { type: "error", text: "ERROR: API route responded with error. Please try email directly." }
             ]);
           }
-        } catch (e) {
+        } catch {
           setHistory((prev) => [
             ...prev,
             { type: "error", text: "ERROR: Network failure. Please try email directly." }
@@ -141,10 +141,12 @@ export const CommandTerminal: React.FC<CommandTerminalProps> = ({ onOpenFile }) 
   neofetch      - Render system neofetch layout.
   about         - Display high-level bio information.
   skills        - Print list of engineering capabilities.
-  projects      - List active github/demo projects.
+  experience    - Print career timeline and roles.
+  projects      - List active repositories & showcases.
   contact       - Print communication detail channels.
-  cat [file]    - Open and display a file inside the editor tabs (e.g. cat about_me.json).
-  run contact   - Trigger interactive CLI message submission prompt.
+  cat [file]    - Open and display a file inside editor tabs (e.g. cat experience.json).
+  open [file]   - Alias for cat command.
+  run contact   - Trigger interactive CLI message submission wizard.
   clear         - Clear terminal output stream.`
           }
         ]);
@@ -160,6 +162,7 @@ export const CommandTerminal: React.FC<CommandTerminalProps> = ({ onOpenFile }) 
 
       case "about":
       case "skills":
+      case "experience":
       case "projects":
       case "contact":
         setHistory((prev) => [...prev, { type: "output", text: terminalResponses[cmd] }]);
@@ -178,19 +181,30 @@ export const CommandTerminal: React.FC<CommandTerminalProps> = ({ onOpenFile }) 
         }
         break;
 
+      case "open":
       case "cat":
         if (!arg) {
-          setHistory((prev) => [...prev, { type: "error", text: 'Usage: "cat [filename]". Try "cat about_me.json".' }]);
+          setHistory((prev) => [...prev, { type: "error", text: 'Usage: "cat [filename]". Try "cat experience.json" or "cat about_me.json".' }]);
           break;
         }
-        
+
+        // Normalize filename (strip projects/ if passed)
+        const normalizedArg = arg.replace(/^projects\//, "");
+
         // Match files
-        const validFiles = ["about_me.json", "skills.ts", "doctors-nextjs.md", "design-canvas.md", "contact_info.yaml"];
-        if (validFiles.includes(arg)) {
-          onOpenFile(arg);
-          setHistory((prev) => [...prev, { type: "output", text: `Opening file "${arg}" in workspace view.` }]);
+        const validFiles = [
+          "about_me.json",
+          "skills.ts",
+          "experience.json",
+          "resume.md",
+          ...projects.map((p) => `${p.id}.md`),
+          "contact_info.yaml"
+        ];
+        if (validFiles.includes(normalizedArg)) {
+          onOpenFile(normalizedArg);
+          setHistory((prev) => [...prev, { type: "output", text: `Opening file "${normalizedArg}" in workspace view.` }]);
         } else {
-          setHistory((prev) => [...prev, { type: "error", text: `cat: File not found: "${arg}".` }]);
+          setHistory((prev) => [...prev, { type: "error", text: `cat: File not found: "${arg}". Valid files: ${validFiles.join(", ")}` }]);
         }
         break;
 
@@ -214,7 +228,7 @@ export const CommandTerminal: React.FC<CommandTerminalProps> = ({ onOpenFile }) 
           if (log.type === "input") {
             return (
               <div key={idx} className="text-slate-300">
-                <span className="text-accent/70">visitor@ahmed-portfolio:~$</span>{" "}
+                <span className="text-accent/70">visitor@rabiahmed-portfolio:~$</span>{" "}
                 <span>{log.text}</span>
               </div>
             );
@@ -238,7 +252,7 @@ export const CommandTerminal: React.FC<CommandTerminalProps> = ({ onOpenFile }) 
       {/* Input Prompt */}
       <div className="flex items-center text-slate-300 mt-2 border-t border-slate-900 pt-2 shrink-0">
         <span className="text-accent/80 select-none mr-2 shrink-0">
-          {contactStep === "idle" ? "visitor@ahmed-portfolio:~$" : `(contact-wizard:${contactStep}) >`}
+          {contactStep === "idle" ? "visitor@rabiahmed-portfolio:~$" : `(contact-wizard:${contactStep}) >`}
         </span>
         <div className="flex-1 relative flex items-center">
           <input

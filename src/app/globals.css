@@ -80,3 +80,196 @@ body {
   from, to { background-color: transparent }
   50% { background-color: var(--accent) }
 }
+
+/* ==========================================================================
+   Print / PDF Export Styles for Resume
+   ========================================================================== */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 8mm 8mm;
+  }
+
+  /* 1. Reset root and ancestors so paged media breaks across pages naturally */
+  html,
+  body {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* 2. Completely hide all non-print workspace chrome */
+  .no-print,
+  .no-print * {
+    display: none !important;
+  }
+
+  /* 3. Unconstrain workspace layout hierarchy */
+  .workspace-root,
+  .workspace-container,
+  .workspace-main-frame,
+  .workspace-pane-inner,
+  .workspace-content-pane,
+  .workspace-file-wrapper,
+  .workspace-renderer-root,
+  .workspace-scroll-container,
+  .resume-document-wrapper {
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    position: static !important;
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    background: transparent !important;
+    border: none !important;
+  }
+
+  /* 4. Resume sheet styling in normal document flow */
+  #resume-sheet {
+    display: block !important;
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    overflow: visible !important;
+    z-index: auto !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* 5. Natural 2-Page Executive Boundaries */
+  .resume-page {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    background: #ffffff !important;
+  }
+
+  .resume-page-1 {
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+
+  .resume-page-2 {
+    page-break-before: always !important;
+    break-before: page !important;
+  }
+
+  /* Atomic card protections */
+  .resume-experience-item,
+  .resume-project-card {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* 6. Force 2-Column layout in print regardless of screen DPI */
+  #resume-sheet .resume-grid-container {
+    display: grid !important;
+    grid-template-columns: 35% 65% !important;
+    width: 100% !important;
+  }
+
+  #resume-sheet .resume-left-col {
+    grid-column: 1 !important;
+    width: 100% !important;
+    border-right: 1px solid #cbd5e1 !important;
+    border-bottom: none !important;
+    padding: 12px 14px !important;
+    background-color: #f8fafc !important;
+  }
+
+  #resume-sheet .resume-right-col {
+    grid-column: 2 !important;
+    width: 100% !important;
+    padding: 12px 14px !important;
+    background-color: #ffffff !important;
+  }
+
+  /* Force 2-Column project grid on Page 2 */
+  #resume-sheet .resume-projects-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+    padding: 14px 16px !important;
+  }
+
+  /* 7. Typography and Colors */
+  #resume-sheet h1,
+  #resume-sheet h2,
+  #resume-sheet h3,
+  #resume-sheet h4,
+  #resume-sheet strong,
+  #resume-sheet b,
+  #resume-sheet .text-white,
+  #resume-sheet .text-slate-950,
+  #resume-sheet .text-slate-900,
+  #resume-sheet .text-slate-800 {
+    color: #0f172a !important;
+  }
+
+  #resume-sheet p,
+  #resume-sheet span,
+  #resume-sheet li,
+  #resume-sheet div,
+  #resume-sheet .text-slate-200,
+  #resume-sheet .text-slate-300,
+  #resume-sheet .text-slate-400,
+  #resume-sheet .text-slate-500,
+  #resume-sheet .text-slate-600,
+  #resume-sheet .text-slate-700 {
+    color: #1e293b !important;
+  }
+
+  #resume-sheet .text-accent,
+  #resume-sheet .text-emerald-700,
+  #resume-sheet .text-emerald-800,
+  #resume-sheet .text-\[\#1d4ed8\] {
+    color: #1d4ed8 !important;
+  }
+
+  #resume-sheet .bg-\[\#1d4ed8\] {
+    background-color: #1d4ed8 !important;
+  }
+
+  #resume-sheet header,
+  #resume-sheet footer {
+    background-color: #f8fafc !important;
+    border-color: #cbd5e1 !important;
+  }
+
+  #resume-sheet section,
+  #resume-sheet div {
+    border-color: #e2e8f0 !important;
+  }
+
+  /* Tag badges: light background with crisp readable dark text (never pitch black) */
+  #resume-sheet .resume-tag {
+    background-color: #f1f5f9 !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #1e293b !important;
+    display: inline-block !important;
+  }
+
+  #resume-sheet .resume-project-card {
+    background-color: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+  }
+}
+
+

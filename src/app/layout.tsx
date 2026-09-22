@@ -13,8 +13,19 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Ahmed | Full-Stack Developer Portfolio Workspace",
-  description: "Interactive workspace portfolio for Ahmed, Full-Stack Developer specializing in React, Next.js, Node.js, and Postgres.",
+  title: "Rabi Ahmed | Full-Stack Software Developer Portfolio",
+  description: "Interactive IDE developer portfolio for Rabi Ahmed, Full-Stack Software Developer based in Karachi, Pakistan. Specializing in Next.js, React, TypeScript, Node.js, and PostgreSQL.",
+  keywords: ["Rabi Ahmed", "Full-Stack Developer", "Next.js", "TypeScript", "React", "Node.js", "PostgreSQL", "Portfolio", "Karachi"],
+  authors: [{ name: "Rabi Ahmed", url: "https://github.com/rabiahmed8" }],
+  creator: "Rabi Ahmed",
+  openGraph: {
+    title: "Rabi Ahmed | Full-Stack Software Developer Portfolio",
+    description: "Interactive IDE developer portfolio for Rabi Ahmed. Specializing in Next.js, React, TypeScript, Node.js, and PostgreSQL.",
+    url: "https://github.com/rabiahmed8",
+    siteName: "Rabi Ahmed Portfolio",
+    locale: "en_US",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

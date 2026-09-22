@@ -1,7 +1,21 @@
 "use client";
 
 import React, { useState } from "react";
-import { Folder, FolderOpen, FileCode, ChevronDown, ChevronRight, Menu, X, User, Code2, Mail } from "lucide-react";
+import {
+  Folder,
+  FolderOpen,
+  FileCode,
+  ChevronDown,
+  ChevronRight,
+  User,
+  Code2,
+  Mail,
+  Briefcase,
+  FileText,
+  LucideIcon
+} from "lucide-react";
+
+import { projects } from "@/data/portfolioData";
 
 interface SidebarProps {
   activeFileId: string;
@@ -13,13 +27,13 @@ interface FileNode {
   id: string;
   name: string;
   type: "file";
-  icon: React.ComponentType<any>;
+  icon: LucideIcon;
 }
 
 interface FolderNode {
   name: string;
   type: "folder";
-  icon: React.ComponentType<any>;
+  icon: LucideIcon;
   children: FileNode[];
 }
 
@@ -45,25 +59,29 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeFileId, onSelectFile, op
       type: "folder",
       icon: User,
       children: [
-        { id: "about_me.json", name: "about_me.json", type: "file", icon: FileCode },
+        { id: "about_me.json", name: "about_me.json", type: "file", icon: User },
         { id: "skills.ts", name: "skills.ts", type: "file", icon: FileCode },
+        { id: "experience.json", name: "experience.json", type: "file", icon: Briefcase },
+        { id: "resume.md", name: "resume.md", type: "file", icon: FileText },
       ],
     },
     {
       name: "Projects",
       type: "folder",
       icon: Code2,
-      children: [
-        { id: "doctors-nextjs.md", name: "doctors-nextjs.md", type: "file", icon: FileCode },
-        { id: "design-canvas.md", name: "design-canvas.md", type: "file", icon: FileCode },
-      ],
+      children: projects.map((p) => ({
+        id: `${p.id}.md`,
+        name: `${p.id}.md`,
+        type: "file",
+        icon: FileCode,
+      })),
     },
     {
       name: "Contact",
       type: "folder",
       icon: Mail,
       children: [
-        { id: "contact_info.yaml", name: "contact_info.yaml", type: "file", icon: FileCode },
+        { id: "contact_info.yaml", name: "contact_info.yaml", type: "file", icon: Mail },
       ],
     },
   ];
@@ -85,7 +103,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeFileId, onSelectFile, op
         {fileTree.map((node) => {
           if (node.type === "folder") {
             const isExpanded = expandedFolders[node.name];
-            const FolderIcon = node.icon;
             return (
               <div key={node.name} className="mb-2">
                 <button
