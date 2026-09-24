@@ -64,7 +64,7 @@ interface FileContentRendererProps {
   fileId: string;
 }
 
-// Simple Custom Code Highlighter Utility
+// Custom Code Highlighter Utility with JSX/TSX support
 const highlightCode = (code: string, lang: string) => {
   if (!code) return [];
 
@@ -88,26 +88,34 @@ const highlightCode = (code: string, lang: string) => {
       const keywords = [
         "const", "let", "var", "function", "class", "export", "import", "from",
         "return", "await", "async", "interface", "private", "public", "extends",
-        "implements", "type", "string", "number", "boolean", "new"
+        "implements", "type", "string", "number", "boolean", "new", "default", "null"
       ];
       keywords.forEach((kw) => {
         const regex = new RegExp(`\\b(${kw})\\b`, "g");
         escaped = escaped.replace(regex, '<span class="text-[#f43f5e] font-semibold">$1</span>');
       });
 
-      // 4. Function invocations (sky blue)
+      // 4. JSX Tag names & Components (emerald for components, sky for html)
+      escaped = escaped.replace(/(&lt;\/?)([A-Z][a-zA-Z0-9_.]*)/g, '$1<span class="text-[#2dd4bf] font-semibold">$2</span>');
+      escaped = escaped.replace(/(&lt;\/?)([a-z][a-zA-Z0-9_-]*)/g, '$1<span class="text-[#38bdf8]">$2</span>');
+
+      // 5. JSX Props / attributes
+      escaped = escaped.replace(/\b([a-zA-Z0-9_-]+)=/g, '<span class="text-[#fbbf24]">$1</span>=');
+
+      // 6. Function invocations (sky blue)
       escaped = escaped.replace(/(\b\w+)(?=\()/g, '<span class="text-[#38bdf8]">$1</span>');
 
-      // 5. YAML Keys or JSON keys (yellow/cyan)
+      // 7. YAML Keys or JSON keys (yellow/cyan)
       if (lang === "yaml") {
         escaped = escaped.replace(/^(\s*)([\w-]+)(:)/g, '$1<span class="text-[#38bdf8]">$2</span>$3');
       } else if (lang === "json") {
         escaped = escaped.replace(/(["'])(.*?)\1(\s*:)/g, '<span class="text-[#38bdf8]">$1$2$1</span>$3');
       } else if (lang === "markdown") {
         escaped = escaped.replace(/^(#+\s.*)$/g, '<span class="text-[#38bdf8] font-bold">$1</span>');
+        escaped = escaped.replace(/(\*\*[^*]+\*\*)/g, '<span class="text-[#f43f5e] font-semibold">$1</span>');
       }
 
-      // 6. Numbers (orange)
+      // 8. Numbers (orange)
       escaped = escaped.replace(/\b(\d+)\b/g, '<span class="text-[#fb923c]">$1</span>');
     }
 
@@ -121,6 +129,48 @@ const highlightCode = (code: string, lang: string) => {
     );
   });
 };
+
+// Generates formatted Markdown specification with frontmatter matching the visual preview
+function generateProjectMarkdown(proj: (typeof projects)[0]): string {
+  const statusStr = proj.demoUrl
+    ? "Live in Production"
+    : proj.demoStatus === "internal"
+    ? `Internal Deployment (${proj.demoNote || "Enterprise"})`
+    : proj.demoStatus === "offline"
+    ? "Archived / Offline"
+    : "Production System";
+
+  const repoStr = proj.githubUrl
+    ? `[${proj.githubUrl}](${proj.githubUrl})`
+    : proj.isRepoPrivate
+    ? `Private Client Repository (${proj.repoNote || "Proprietary under NDA"})`
+    : "Private Repository";
+
+  return `---
+id: "${proj.id}"
+title: "${proj.name}"
+category: "${proj.category}"
+status: "${statusStr}"
+${proj.demoUrl ? `demo_url: "${proj.demoUrl}"\n` : ""}${proj.githubUrl ? `github_url: "${proj.githubUrl}"\n` : `is_private_repo: true\n`}stack:
+${proj.tags.map((t) => `  - "${t}"`).join("\n")}
+---
+
+# ${proj.name}
+> ${proj.category} • ${statusStr}
+
+${proj.description}
+
+## 🛠 Technology Stack
+${proj.tags.map((t) => `- **${t}**`).join("\n")}
+
+## 🚀 Architecture & Engineering Highlights
+${proj.highlights.map((h) => `- [x] ${h}`).join("\n")}
+
+## 📌 Project Links & Availability
+- **Deployment:** ${proj.demoUrl ? `[${proj.demoUrl}](${proj.demoUrl})` : statusStr}
+- **Source Repository:** ${repoStr}
+`;
+}
 
 export const FileContentRenderer: React.FC<FileContentRendererProps> = ({ fileId }) => {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
@@ -181,7 +231,7 @@ ${resumeData.summary}
 ---
 
 ## Technical Skills
-- **Programming Languages**: JavaScript (ES6+), TypeScript, Python (academic), c++ (academic)
+- **Programming Languages**: JavaScript (ES6+), TypeScript, Python (academic), C++ (academic)
 - **Frontend**: React.js, Next.js, Tailwind CSS, HTML5, CSS3, shadcn/ui, Ant Design
 - **Backend**: Node.js, Express.js, Next.js API Routes, RESTful APIs, Authentication
 - **Databases & ORMs**: PostgreSQL (neon db, Supabase), MySQL, Prisma ORM, TypeORM
@@ -206,7 +256,11 @@ ${edu.highlights?.map((hl) => `- ${hl}`).join("\n")}
 `;
 
   // Helper to render Code Editor Panel
-  const renderEditorPanel = (code: string, language: string, filename: string) => {
+  const renderEditorPanel = (
+    code: string,
+    language: string,
+    filename: string
+  ) => {
     return (
       <div className="flex-1 flex flex-col h-full bg-[#070a13] rounded-lg border border-card-border overflow-hidden">
         <div className="px-4 py-2 bg-[#05080f] border-b border-card-border flex items-center justify-between text-slate-400 select-none text-[11px] font-mono">
@@ -313,9 +367,8 @@ export const skills: { category: string; items: Skill[] }[] = ${JSON.stringify(s
                 )}
               {fileId.endsWith(".md") && fileId !== "resume.md" && (() => {
                 const proj = projects.find((p) => `${p.id}.md` === fileId);
-                return proj
-                  ? renderEditorPanel(proj.codeSnippet, proj.codeLanguage, `${proj.id}.${proj.codeLanguage === "typescript" ? "ts" : "js"}`)
-                  : <div className="text-slate-400 font-mono text-xs">Project not found</div>;
+                if (!proj) return <div className="text-slate-400 font-mono text-xs">Project not found</div>;
+                return renderEditorPanel(generateProjectMarkdown(proj), "markdown", `${proj.id}.md`);
               })()}
             </motion.div>
           ) : (
@@ -542,8 +595,10 @@ export const skills: { category: string; items: Skill[] }[] = ${JSON.stringify(s
                 return (
                   <div className="grid grid-cols-1 xl:grid-cols-5 gap-6">
                     <div className="xl:col-span-3 space-y-6">
-                      <div className="glassmorphism p-6 rounded-xl relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-24 h-24 bg-accent/5 rounded-full blur-xl" />
+                      <div className="glassmorphism p-6 rounded-xl relative">
+                        <div className="absolute inset-0 rounded-xl overflow-hidden pointer-events-none">
+                          <div className="absolute top-0 right-0 w-24 h-24 bg-accent/5 rounded-full blur-xl" />
+                        </div>
                         <span className="text-xs font-mono text-accent/80 font-semibold uppercase tracking-wider block mb-1">
                           {proj.category}
                         </span>
@@ -574,7 +629,7 @@ export const skills: { category: string; items: Skill[] }[] = ${JSON.stringify(s
                             >
                               <Building2 size={13} className="mr-1.5 text-slate-500" />
                               <span>Internal Deployment</span>
-                              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block px-2.5 py-1 bg-slate-950 border border-slate-700 text-[11px] text-slate-300 rounded shadow-xl whitespace-nowrap z-30 pointer-events-none">
+                              <div className="absolute bottom-full left-0 mb-2.5 hidden group-hover:block px-3 py-1.5 bg-slate-950/95 border border-slate-700/80 text-[11px] text-slate-200 rounded-md shadow-2xl z-30 pointer-events-none whitespace-normal min-w-[220px] max-w-xs sm:max-w-sm leading-relaxed backdrop-blur-md">
                                 {proj.demoNote || "Enterprise internal system - private deployment"}
                               </div>
                             </div>
@@ -585,7 +640,7 @@ export const skills: { category: string; items: Skill[] }[] = ${JSON.stringify(s
                             >
                               <Globe size={13} className="mr-1.5 text-slate-500" />
                               <span>Demo Offline</span>
-                              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block px-2.5 py-1 bg-slate-950 border border-slate-700 text-[11px] text-slate-300 rounded shadow-xl whitespace-nowrap z-30 pointer-events-none">
+                              <div className="absolute bottom-full left-0 mb-2.5 hidden group-hover:block px-3 py-1.5 bg-slate-950/95 border border-slate-700/80 text-[11px] text-slate-200 rounded-md shadow-2xl z-30 pointer-events-none whitespace-normal min-w-[200px] max-w-xs leading-relaxed backdrop-blur-md">
                                 {proj.demoNote || "Demo currently offline / archived"}
                               </div>
                             </div>
@@ -609,7 +664,7 @@ export const skills: { category: string; items: Skill[] }[] = ${JSON.stringify(s
                             >
                               <Lock size={13} className="mr-1.5 text-amber-400/80" />
                               <span>Private Repo</span>
-                              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block px-2.5 py-1 bg-slate-950 border border-slate-700 text-[11px] text-slate-300 rounded shadow-xl whitespace-nowrap z-30 pointer-events-none">
+                              <div className="absolute bottom-full left-0 mb-2.5 hidden group-hover:block px-3 py-1.5 bg-slate-950/95 border border-slate-700/80 text-[11px] text-slate-200 rounded-md shadow-2xl z-30 pointer-events-none whitespace-normal min-w-[200px] max-w-xs leading-relaxed backdrop-blur-md">
                                 {proj.repoNote || "Proprietary client/company repository (private)"}
                               </div>
                             </div>

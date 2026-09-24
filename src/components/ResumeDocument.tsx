@@ -15,7 +15,8 @@ import {
   Layers,
   Server,
   Database,
-  Lock
+  Lock,
+  Phone
 } from "lucide-react";
 import {
   aboutMe,
@@ -186,6 +187,13 @@ export const ResumeDocument: React.FC<ResumeDocumentProps> = ({ showControls = t
                 </div>
 
                 <div className="flex items-center space-x-1.5">
+                  <Phone size={12} className={isCyber ? "text-accent" : "text-emerald-700"} />
+                  <a href={`tel:${contactInfo.phone.replace(/\s+/g, "")}`} className="hover:underline">
+                    {contactInfo.phone}
+                  </a>
+                </div>
+
+                <div className="flex items-center space-x-1.5">
                   <MapPin size={12} className={isCyber ? "text-accent" : "text-emerald-700"} />
                   <span>{contactInfo.location}</span>
                 </div>
@@ -202,7 +210,7 @@ export const ResumeDocument: React.FC<ResumeDocumentProps> = ({ showControls = t
                   </a>
                 </div>
 
-                <div className="flex items-center space-x-1.5">
+                <div className="flex items-center space-x-1.5 col-span-2">
                   <LinkedinIcon className={`w-3 h-3 ${isCyber ? "text-accent" : "text-emerald-700"}`} />
                   <a
                     href={contactInfo.linkedin}
