@@ -193,10 +193,8 @@ export const projects: Project[] = [
     category: "AI & Real-Time WebRTC Platform",
     description: "An AI-powered conversational sales platform featuring real-time, lipsynced video avatars that live on websites to greet visitors, answer complex product questions, capture qualified leads, and map visitor journeys from page view to conversion intent.",
     tags: ["Next.js 16", "Anam AI", "WebRTC", "LLMs / OpenAI", "Firecrawl", "Supabase", "TypeScript", "Tailwind CSS"],
-    isRepoPrivate: true,
-    repoNote: "Proprietary startup repository under NDA",
-    demoStatus: "internal",
-    demoNote: "Interactive MVP & investor prototype deployed on private staging environment",
+    demoUrl: "https://www.ruhanaai.com/",
+    githubUrl: "https://github.com/Abdulhadidev03/Avatar-Startup",
     highlights: [
       "Engineered real-time lipsynced video avatar streaming using Anam AI SDK and WebRTC for low-latency voice and video sales interactions",
       "Integrated automated website knowledge ingestion via Firecrawl, scraping client domains to generate contextual business profiles",
