@@ -47,10 +47,10 @@ export const aboutMe = {
   role: "Full-Stack Software Developer",
   bio: "Passionate software engineer specializing in building high-performance, responsive web applications and scalable backend systems with Next.js, TypeScript, Node.js, and PostgreSQL. Dedicated to clean code, modular architecture, and creating immersive user experiences.",
   stats: {
-    "Commercial Experience": "3+ Years",
-    "Avg Lighthouse Score": "98 / 100",
-    "UI Fluidity": "60 FPS",
-    "git push --force": "0 to main"
+    "Experience": "3+ Years",
+    "Shipped to Production": "10+ Apps",
+    "Core Stack": "Next.js & TypeScript",
+    "Humor Setting": "75%"
   }
 };
 

@@ -447,7 +447,7 @@ export const skills: { category: string; items: Skill[] }[] = ${JSON.stringify(s
                         <span className="text-xs uppercase tracking-wider text-slate-500 font-mono">
                           {key}
                         </span>
-                        <span className="text-2xl font-extrabold text-white mt-4 font-mono group-hover:text-accent transition-colors">
+                        <span className="text-xl sm:text-2xl font-extrabold text-white mt-4 font-mono group-hover:text-accent transition-colors leading-snug">
                           {val}
                         </span>
                       </div>
