@@ -39,6 +39,7 @@ export interface ContactInfo {
   location: string;
   github: string;
   linkedin: string;
+  portfolio: string;
   twitter?: string;
 }
 
@@ -163,19 +164,19 @@ export const resumeData = {
   role: "Full-Stack Software Developer",
   location: "Karachi, Pakistan",
   email: "ahmedrabi8@gmail.com",
+  portfolio: "https://rabiahmed-portfolio.vercel.app/",
   github: "https://github.com/rabiahmed8",
   linkedin: "https://www.linkedin.com/in/rabi-ahmed-2b5a9a18b/",
-  summary: "Results-driven Full-Stack Software Developer with 3+ years of experience building scalable, performant web applications and backend systems using Next.js, TypeScript, React, Node.js, and PostgreSQL. Passionate about clean code, intuitive UI/UX, and robust system architecture.",
+  summary: "Full-Stack Software Developer with 3+ years of experience engineering responsive web applications and backend systems using Next.js, React, TypeScript, Node.js, and PostgreSQL. Experienced across startup and client environments delivering clean user interfaces, resilient REST APIs, and optimized database schemas with Prisma.",
   education: [
     {
-      degree: "BS IN COMPUTER SCIENCE",
-      institution: "UBIT",
-      period: "2020 - Present",
-      details: "Gained strong foundation in data structures, algorithms, object-oriented programming, and software engineering principles.",
+      degree: "BS in Computer Science",
+      institution: "UBIT, University of Karachi",
+      period: "2020 - 2024",
+      details: "Strong academic foundation in data structures, algorithms, database systems, and software engineering.",
       highlights: [
-        "Gained strong foundation in data structures, algorithms, object-oriented programming, and software engineering principles.",
-        "Completed academic projects involving web development, database design, and cloud deployment.",
-        "Worked with languages and tools like JavaScript, TypeScript, Python, MySQL, and Linux throughout the degree."
+        "Core Coursework: Data Structures & Algorithms, Database Systems, Object-Oriented Programming, Software Engineering, Web Technologies.",
+        "Built full-stack applications, relational schemas, and system prototypes using TypeScript, JavaScript, Python, and MySQL."
       ]
     }
   ],
@@ -299,6 +300,7 @@ export const contactInfo: ContactInfo = {
   email: "ahmedrabi8@gmail.com",
   phone: "+92 312 1120251",
   location: "Karachi, Pakistan",
+  portfolio: "https://rabiahmed-portfolio.vercel.app/",
   github: "https://github.com/rabiahmed8",
   linkedin: "https://www.linkedin.com/in/rabi-ahmed-2b5a9a18b/"
 };

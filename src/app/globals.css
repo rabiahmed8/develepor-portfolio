@@ -238,13 +238,30 @@ body {
 
   #resume-sheet .text-accent,
   #resume-sheet .text-emerald-700,
-  #resume-sheet .text-emerald-800,
-  #resume-sheet .text-\[\#1d4ed8\] {
-    color: #1d4ed8 !important;
+  #resume-sheet .text-emerald-800 {
+    color: #047857 !important;
   }
 
-  #resume-sheet .bg-\[\#1d4ed8\] {
-    background-color: #1d4ed8 !important;
+  /* 8. Hyperlinks in Print / PDF - Guarantee 100% Clickable Annotations */
+  #resume-sheet a,
+  #resume-sheet a[href] {
+    color: #047857 !important;
+    text-decoration: underline !important;
+    text-decoration-thickness: 1px !important;
+    text-underline-offset: 2.5px !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+  }
+
+  #resume-sheet a span {
+    color: #047857 !important;
+  }
+
+  #resume-sheet a svg {
+    color: #047857 !important;
+    stroke: #047857 !important;
   }
 
   #resume-sheet header,
@@ -258,7 +275,7 @@ body {
     border-color: #e2e8f0 !important;
   }
 
-  /* Tag badges: light background with crisp readable dark text (never pitch black) */
+  /* Tag badges: light background with crisp readable dark text */
   #resume-sheet .resume-tag {
     background-color: #f1f5f9 !important;
     border: 1px solid #cbd5e1 !important;
