@@ -172,7 +172,7 @@ export const resumeData = {
     {
       degree: "BS in Computer Science",
       institution: "UBIT, University of Karachi",
-      period: "2020 - 2024",
+      period: "2021 - Present",
       details: "Strong academic foundation in data structures, algorithms, database systems, and software engineering.",
       highlights: [
         "Core Coursework: Data Structures & Algorithms, Database Systems, Object-Oriented Programming, Software Engineering, Web Technologies.",
