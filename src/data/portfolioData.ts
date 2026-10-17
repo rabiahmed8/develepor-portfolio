@@ -204,6 +204,23 @@ export const projects: Project[] = [
     ]
   },
   {
+    id: "onboard",
+    name: "Onboard (AI Maritime & Logistics Platform)",
+    category: "AI & Maritime Logistics Platform",
+    description: "An AI-powered maritime hiring, credential verification, and crew management platform connecting vessel operators and logistics companies with verified seafarers. Features intelligent CV and document parsing via Google Cloud Document AI and OpenAI, automated certificate expiry tracking with templated email alerts, a modular domain-driven Next.js and Prisma architecture, and an interactive scroll-scrubbed web journey.",
+    tags: ["Next.js 16", "TypeScript", "Prisma ORM", "PostgreSQL", "Google Document AI", "OpenAI", "NextAuth.js", "Supabase", "TanStack Query", "Tailwind CSS", "GSAP / Lenis"],
+    demoUrl: "https://on-board.com.au/",
+    isRepoPrivate: true,
+    repoNote: "Proprietary client repository under NDA",
+    highlights: [
+      "Engineered automated seafarer document extraction workflows utilizing Google Cloud Document AI and OpenAI for maritime certifications and sea service records",
+      "Architected domain-driven backend API services with Next.js 16, Prisma 7 ORM, and Supabase PostgreSQL for talent profiles, company job postings, and applications",
+      "Built resilient authentication and role-based onboarding pipelines using NextAuth v5 with OTP email verification for seafarers and enterprise maritime operators",
+      "Implemented automated background notification engine with HTML templating for real-time application updates and document renewal reminders",
+      "Designed and developed the interactive marketing platform featuring Lenis smooth scrolling, GSAP timeline animations, and scroll-scrubbed vessel video transitions"
+    ]
+  },
+  {
     id: "best-orthopaedic-surgeons",
     name: "BestOrthopaedicSurgeons.com",
     category: "Full-Stack Platform",
