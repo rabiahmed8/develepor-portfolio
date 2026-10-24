@@ -221,6 +221,22 @@ export const projects: Project[] = [
     ]
   },
   {
+    id: "clinaxy",
+    name: "Clinaxy (AI Healthcare & Clinical Scribe)",
+    category: "AI & Healthcare Workflow Platform",
+    description: "An AI-powered clinical documentation and workflow automation platform for Australian clinics, GPs, and specialists. Features real-time ambient medical scribing, conversational voice intake agents powered by ElevenLabs, automated referral triage, and structured clinical consult summaries.",
+    tags: ["Next.js 16", "React 19", "ElevenLabs SDK", "AI Voice Agent", "TypeScript", "Tailwind CSS", "Framer Motion"],
+    demoUrl: "https://clinaxy.ai/",
+    isRepoPrivate: true,
+    repoNote: "Proprietary healthcare codebase under NDA",
+    highlights: [
+      "Engineered ambient AI medical scribe generating structured consultation notes, EHR summaries, and follow-ups in real time",
+      "Integrated ElevenLabs conversational voice agent SDK for automated patient call reception, appointment scheduling, and intake workflows",
+      "Developed end-to-end patient referral triage assessment system and provider dashboard with Next.js and Tailwind CSS",
+      "Designed intuitive clinical UI with Framer Motion transitions, responsive consult views, and robust state management"
+    ]
+  },
+  {
     id: "best-orthopaedic-surgeons",
     name: "BestOrthopaedicSurgeons.com",
     category: "Full-Stack Platform",
