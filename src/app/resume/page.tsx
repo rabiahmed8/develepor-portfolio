@@ -4,13 +4,13 @@ import { ResumeDocument } from "@/components/ResumeDocument";
 import { ArrowLeft, Terminal } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Rabi Ahmed | Full-Stack Developer Resume (CV)",
-  description: "High-density printable curriculum vitae and resume for Rabi Ahmed, Full-Stack Software Developer. Next.js, React, TypeScript, Node.js, and PostgreSQL.",
+  title: "Rabi Ahmed | Full-Stack & AI Engineer Resume (CV)",
+  description: "High-density printable curriculum vitae and resume for Rabi Ahmed, Full-Stack Engineer specializing in Next.js and AI integrations. Next.js, React, TypeScript, Node.js, PostgreSQL, OpenAI, and ElevenLabs.",
 };
 
 export default function ResumePage() {
   return (
-    <div className="min-h-screen bg-[#070a13] text-slate-100 flex flex-col items-center py-6 px-4">
+    <div className="min-h-screen bg-[#070a13] text-slate-100 flex flex-col items-center py-6 px-4 print:min-h-0 print:p-0 print:bg-white">
       {/* Top Banner Navigation (Hidden in print) */}
       <div className="no-print w-full max-w-[850px] mb-4 flex items-center justify-between text-xs font-mono text-slate-400 border-b border-card-border pb-3">
         <Link

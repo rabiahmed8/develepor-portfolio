@@ -421,7 +421,7 @@ export const ResumeDocument: React.FC<ResumeDocumentProps> = ({ showControls = t
         <div className="resume-page resume-page-2 border-t-2 border-slate-800/60 flex flex-col">
           {/* Page 2 Header Banner */}
           <div
-            className={`p-4 md:p-5 border-b flex flex-wrap items-center justify-between gap-2 ${
+            className={`resume-page-banner p-4 md:p-5 border-b flex flex-wrap items-center justify-between gap-2 ${
               isCyber
                 ? "bg-[#090f1d] border-slate-800"
                 : "bg-slate-50 border-slate-200"

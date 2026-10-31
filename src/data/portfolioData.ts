@@ -45,8 +45,8 @@ export interface ContactInfo {
 
 export const aboutMe = {
   name: "Rabi Ahmed",
-  role: "Full-Stack Software Developer",
-  bio: "Passionate software engineer specializing in building high-performance, responsive web applications and scalable backend systems with Next.js, TypeScript, Node.js, and PostgreSQL. Dedicated to clean code, modular architecture, and creating immersive user experiences.",
+  role: "Full-Stack Engineer · Next.js & AI Integrations",
+  bio: "Full-stack engineer building production web apps and AI-powered products with Next.js, TypeScript, Node.js, and PostgreSQL — from LLM document extraction to real-time voice and video agents. AI-native workflow with Claude Code. Dedicated to clean code, modular architecture, and immersive user experiences.",
   stats: {
     "Experience": "3+ Years",
     "Shipped to Production": "10+ Apps",
@@ -56,6 +56,18 @@ export const aboutMe = {
 };
 
 export const skills: SkillGroup[] = [
+  {
+    category: "AI & LLM Integration",
+    items: [
+      { name: "OpenAI API", level: 88, icon: "Cpu" },
+      { name: "ElevenLabs Voice Agents", level: 85, icon: "Cpu" },
+      { name: "Anam AI (real-time avatars)", level: 82, icon: "Cpu" },
+      { name: "Google Document AI", level: 82, icon: "Cpu" },
+      { name: "Firecrawl", level: 80, icon: "Cpu" },
+      { name: "WebRTC", level: 80, icon: "GitMerge" },
+      { name: "Claude Code (agentic workflow)", level: 90, icon: "Code2" }
+    ]
+  },
   {
     category: "Programming Languages",
     items: [
@@ -149,25 +161,25 @@ export const workExperience: ExperienceItem[] = [
     period: "2024 - Present",
     type: "Freelance",
     description: "Delivering end-to-end web applications, CMS platforms, and dynamic frontend experiences directly for global clients.",
-    technologies: ["React", "Tailwind CSS", "Next.js", "Supabase", "PostgreSQL", "Vercel"],
+    technologies: ["Next.js", "React", "TypeScript", "OpenAI", "ElevenLabs", "Supabase", "PostgreSQL", "Vercel"],
     highlights: [
+      "Shipped AI-powered products for international clients: LLM document extraction, conversational voice agents, and real-time video avatars",
       "Built responsive interfaces with React, Tailwind CSS, and modern component libraries",
-      "Communicated directly with clients for requirements, updates, and delivery",
       "Developed features like authentication, CMS systems, file uploads (Supabase), and dashboards",
-      "Deployed full-stack applications on Vercel with environment configuration"
+      "Communicated directly with clients for requirements, updates, and delivery, deploying to Vercel"
     ]
   }
 ];
 
 export const resumeData = {
   name: "Rabi Ahmed",
-  role: "Full-Stack Software Developer",
+  role: "Full-Stack Engineer · Next.js & AI Integrations",
   location: "Karachi, Pakistan",
   email: "ahmedrabi8@gmail.com",
   portfolio: "https://rabiahmed-portfolio.vercel.app/",
   github: "https://github.com/rabiahmed8",
   linkedin: "https://www.linkedin.com/in/rabi-ahmed-2b5a9a18b/",
-  summary: "Full-Stack Software Developer with 3+ years of experience engineering responsive web applications and backend systems using Next.js, React, TypeScript, Node.js, and PostgreSQL. Experienced across startup and client environments delivering clean user interfaces, resilient REST APIs, and optimized database schemas with Prisma.",
+  summary: "Full-Stack Engineer with 3+ years of experience shipping production web apps and AI-powered products with Next.js, React, TypeScript, Node.js, and PostgreSQL. Built LLM document-extraction pipelines (OpenAI, Google Document AI), conversational voice agents (ElevenLabs), and real-time video avatar sales agents (WebRTC) for clients in Australia and beyond. Works AI-native with Claude Code to deliver fast without sacrificing clean architecture, resilient APIs, and well-modeled Prisma schemas. Open to remote roles with US/EU/AU time-zone overlap.",
   education: [
     {
       degree: "BS in Computer Science",
@@ -283,6 +295,7 @@ export const projects: Project[] = [
   },
   {
     id: "floorngo",
+    featured: false,
     name: "FloornGo CMS & Storefront",
     category: "Full-Stack Web App",
     description: "Built a full content management system for the company including blogs, product listings, categories, media uploads, and admin controls. Developed backend logic using Supabase (auth, storage, database) and implemented secure CRUD APIs. Redesigned multiple sections of the website on the frontend, improved UI/UX, implemented dynamic rendering for products/blogs, and optimized page performance across the site.",
@@ -298,6 +311,7 @@ export const projects: Project[] = [
   },
   {
     id: "sudoware-website",
+    featured: false,
     name: "Sudoware Official Website",
     category: "Corporate Web Application",
     description: "Designed and implemented the official company website with modern responsive UI and optimized performance, translating Figma designs into high-speed Next.js code.",
@@ -313,6 +327,7 @@ export const projects: Project[] = [
   },
   {
     id: "etows-dashboard",
+    featured: false,
     name: "Etows Towing Company Dashboard",
     category: "Web Application & Dashboard",
     description: "Engineered frontend architecture and performance optimizations for the admin dashboard of a commercial towing and roadside dispatch network. Resolved critical rendering bottlenecks, enhanced loading speeds, optimized state management, and introduced real-time fleet dispatch workflows. Platform website is hosted at etows.ca, with the dispatch dashboard running internally.",
@@ -345,7 +360,7 @@ Name:       ${aboutMe.name}
 Role:       ${aboutMe.role}
 Location:   ${contactInfo.location}
 Status:     Actively looking for exciting project opportunities.
-Keywords:   Next.js, TypeScript, PostgreSQL, Prisma, APIs, Clean Code.
+Keywords:   Next.js, TypeScript, AI/LLM Integrations, PostgreSQL, Prisma, APIs.
 
 Type "cat about_me.json" inside the workspace viewer to read full bio details!`,
 

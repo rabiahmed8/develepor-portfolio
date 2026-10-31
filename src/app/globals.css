@@ -265,9 +265,15 @@ body {
   }
 
   #resume-sheet header,
-  #resume-sheet footer {
+  #resume-sheet footer,
+  #resume-sheet .resume-page-banner {
     background-color: #f8fafc !important;
     border-color: #cbd5e1 !important;
+  }
+
+  /* Section divider lines (dark in Cyber Mode) */
+  #resume-sheet .h-\[1px\] {
+    background-color: #e2e8f0 !important;
   }
 
   #resume-sheet section,
