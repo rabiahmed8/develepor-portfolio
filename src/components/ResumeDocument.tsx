@@ -247,87 +247,9 @@ export const ResumeDocument: React.FC<ResumeDocumentProps> = ({ showControls = t
             </div>
           </header>
 
-          {/* 2-Column Balanced Body */}
-          <div className="resume-grid-container grid grid-cols-1 md:grid-cols-12 flex-1">
-            {/* LEFT SIDEBAR COLUMN (35% width) */}
-            <aside
-              className={`resume-left-col md:col-span-4 p-5 border-b md:border-b-0 md:border-r space-y-5 text-xs font-sans ${
-                isCyber
-                  ? "bg-[#060911] border-slate-800 text-slate-300"
-                  : "bg-slate-50/60 border-slate-200 text-slate-800"
-              }`}
-            >
-              {/* TECHNICAL SKILLS */}
-              <div>
-                <div className="flex items-center space-x-2 pb-1.5 mb-3 border-b border-slate-200 dark:border-slate-800">
-                  <h2
-                    className={`text-xs font-bold uppercase tracking-wider font-sans shrink-0 ${
-                      isCyber ? "text-accent" : "text-slate-900"
-                    }`}
-                  >
-                    Technical Skills
-                  </h2>
-                  <div className={`h-[1px] flex-1 ${isCyber ? "bg-accent/30" : "bg-slate-200"}`} />
-                </div>
-
-                <div className="space-y-3 text-[10.5px]">
-                  {skills.map((group) => (
-                    <div key={group.category} className="space-y-0.5">
-                      <h3 className={`font-bold font-sans ${isCyber ? "text-slate-200" : "text-slate-900"}`}>
-                        {group.category}
-                      </h3>
-                      <p className={`font-sans leading-relaxed ${isCyber ? "text-slate-400" : "text-slate-600"}`}>
-                        {group.items.map((i) => i.name).join(", ")}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* EDUCATION */}
-              <div className="pt-1">
-                <div className="flex items-center space-x-2 pb-1.5 mb-3 border-b border-slate-200 dark:border-slate-800">
-                  <h2
-                    className={`text-xs font-bold uppercase tracking-wider font-sans shrink-0 ${
-                      isCyber ? "text-accent" : "text-slate-900"
-                    }`}
-                  >
-                    Education
-                  </h2>
-                  <div className={`h-[1px] flex-1 ${isCyber ? "bg-accent/30" : "bg-slate-200"}`} />
-                </div>
-
-                {resumeData.education.map((edu, idx) => (
-                  <div key={idx} className="space-y-1.5 text-[10.5px] font-sans">
-                    <div className="flex flex-wrap justify-between items-baseline gap-x-2">
-                      <h3 className={`font-bold font-sans text-[11px] leading-tight ${isCyber ? "text-white" : "text-slate-950"}`}>
-                        {edu.institution}
-                      </h3>
-                      <span className={`font-medium italic text-[10px] shrink-0 ${isCyber ? "text-accent" : "text-slate-600"}`}>
-                        {edu.period}
-                      </span>
-                    </div>
-
-                    <p className={`text-[10.5px] font-medium ${isCyber ? "text-slate-300" : "text-slate-800"}`}>
-                      {edu.degree}
-                    </p>
-
-                    <ul className="space-y-1 pt-0.5">
-                      {edu.highlights?.map((hl, i) => (
-                        <li key={i} className="flex items-start space-x-1.5 leading-relaxed text-[10px]">
-                          <span className={`text-xs shrink-0 ${isCyber ? "text-accent" : "text-slate-500"}`}>•</span>
-                          <span className={isCyber ? "text-slate-300" : "text-slate-600"}>{hl}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </aside>
-
-            {/* MAIN COLUMN (65% width) - WORK EXPERIENCE */}
-            <main className="resume-right-col md:col-span-8 p-5 space-y-4">
-              <section>
+          {/* Single-column body: reads top-to-bottom for ATS parsers */}
+          <main className="resume-body flex-1 p-5 space-y-3 font-sans">
+            <section>
                 <div className="flex items-center space-x-3 pb-1.5 mb-3.5 border-b border-slate-200 dark:border-slate-800">
                   <h2
                     className={`text-xs font-bold uppercase tracking-wider font-sans shrink-0 ${
@@ -338,8 +260,7 @@ export const ResumeDocument: React.FC<ResumeDocumentProps> = ({ showControls = t
                   </h2>
                   <div className={`h-[1px] flex-1 ${isCyber ? "bg-accent/30" : "bg-slate-200"}`} />
                 </div>
-
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {workExperience.map((item) => (
                     <div key={item.id} className="resume-experience-item space-y-1.5 font-sans">
                       <div className="flex flex-wrap items-baseline justify-between gap-x-2">
@@ -358,7 +279,7 @@ export const ResumeDocument: React.FC<ResumeDocumentProps> = ({ showControls = t
                         </span>
                       </div>
 
-                      <ul className="space-y-1 text-[10.5px] pt-0.5">
+                      <ul className="space-y-0.5 text-[10.5px]">
                         {item.highlights.map((hl, i) => (
                           <li key={i} className="flex items-start space-x-1.5 leading-relaxed">
                             <span className={`text-xs shrink-0 ${isCyber ? "text-accent" : "text-slate-500"}`}>•</span>
@@ -385,13 +306,72 @@ export const ResumeDocument: React.FC<ResumeDocumentProps> = ({ showControls = t
                     </div>
                   ))}
                 </div>
-              </section>
-            </main>
-          </div>
+            </section>
+
+            <section>
+                <div className="flex items-center space-x-3 pb-1.5 mb-3 border-b border-slate-200 dark:border-slate-800">
+                  <h2
+                    className={`text-xs font-bold uppercase tracking-wider font-sans shrink-0 ${
+                      isCyber ? "text-accent" : "text-slate-900"
+                    }`}
+                  >
+                    Technical Skills
+                  </h2>
+                  <div className={`h-[1px] flex-1 ${isCyber ? "bg-accent/30" : "bg-slate-200"}`} />
+                </div>
+              <dl className="space-y-1 text-[10.5px]">
+                {skills.map((group) => (
+                  <div key={group.category} className="flex gap-2 leading-relaxed">
+                    <dt className={`w-40 shrink-0 font-bold ${isCyber ? "text-slate-200" : "text-slate-900"}`}>
+                      {group.category}:
+                    </dt>
+                    <dd className={isCyber ? "text-slate-400" : "text-slate-600"}>
+                      {group.items.map((i) => i.name).join(", ")}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
+
+            <section>
+                <div className="flex items-center space-x-3 pb-1.5 mb-3 border-b border-slate-200 dark:border-slate-800">
+                  <h2
+                    className={`text-xs font-bold uppercase tracking-wider font-sans shrink-0 ${
+                      isCyber ? "text-accent" : "text-slate-900"
+                    }`}
+                  >
+                    Education
+                  </h2>
+                  <div className={`h-[1px] flex-1 ${isCyber ? "bg-accent/30" : "bg-slate-200"}`} />
+                </div>
+                {resumeData.education.map((edu, idx) => (
+                  <div key={idx} className="space-y-1.5 text-[10.5px] font-sans">
+                    <div className="flex flex-wrap justify-between items-baseline gap-x-2">
+                      <h3 className={`font-bold font-sans text-[11px] leading-tight ${isCyber ? "text-white" : "text-slate-950"}`}>
+                        {edu.institution}
+                        <span className={`font-medium ${isCyber ? "text-slate-300" : "text-slate-700"}`}> · {edu.degree}</span>
+                      </h3>
+                      <span className={`font-medium italic text-[10px] shrink-0 ${isCyber ? "text-accent" : "text-slate-600"}`}>
+                        {edu.period}
+                      </span>
+                    </div>
+
+                    <ul className="space-y-1 pt-0.5">
+                      {edu.highlights?.map((hl, i) => (
+                        <li key={i} className="flex items-start space-x-1.5 leading-relaxed text-[10px]">
+                          <span className={`text-xs shrink-0 ${isCyber ? "text-accent" : "text-slate-500"}`}>•</span>
+                          <span className={isCyber ? "text-slate-300" : "text-slate-600"}>{hl}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+            </section>
+          </main>
 
           {/* Page 1 Footer */}
           <footer
-            className={`p-2.5 px-6 text-[10px] font-sans border-t flex justify-between items-center ${
+            className={`no-print p-2.5 px-6 text-[10px] font-sans border-t flex justify-between items-center ${
               isCyber
                 ? "bg-[#05080f] border-slate-800 text-slate-400"
                 : "bg-slate-50 border-slate-200 text-slate-600"
@@ -446,7 +426,7 @@ export const ResumeDocument: React.FC<ResumeDocumentProps> = ({ showControls = t
           </div>
 
           {/* Featured Projects Grid - NO PROJECT LINKS, clean presentation */}
-          <div className="resume-projects-grid p-4 md:p-5 grid grid-cols-1 md:grid-cols-2 gap-3.5 flex-1">
+          <div className="resume-projects-grid p-4 md:p-5 grid grid-cols-1 gap-3 flex-1">
             {projects.filter((p) => p.featured !== false).map((proj) => (
               <div
                 key={proj.id}
@@ -479,7 +459,7 @@ export const ResumeDocument: React.FC<ResumeDocumentProps> = ({ showControls = t
                   {/* Highlights / Key contributions */}
                   {proj.highlights && proj.highlights.length > 0 && (
                     <ul className="mt-2 space-y-1 text-[9.5px] font-sans">
-                      {proj.highlights.slice(0, 2).map((hl, i) => (
+                      {proj.highlights.slice(0, 1).map((hl, i) => (
                         <li key={i} className="flex items-start space-x-1.5 leading-relaxed">
                           <span className={`text-xs shrink-0 ${isCyber ? "text-accent" : "text-slate-500"}`}>•</span>
                           <span className={isCyber ? "text-slate-400" : "text-slate-600"}>{hl}</span>
@@ -509,7 +489,7 @@ export const ResumeDocument: React.FC<ResumeDocumentProps> = ({ showControls = t
 
           {/* Page 2 Footer */}
           <footer
-            className={`p-2.5 px-6 text-[10px] font-sans border-t flex justify-between items-center ${
+            className={`no-print p-2.5 px-6 text-[10px] font-sans border-t flex justify-between items-center ${
               isCyber
                 ? "bg-[#05080f] border-slate-800 text-slate-400"
                 : "bg-slate-50 border-slate-200 text-slate-600"

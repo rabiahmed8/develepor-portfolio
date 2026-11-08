@@ -7,6 +7,7 @@ import { FileContentRenderer } from "./FileContentRenderer";
 import { CommandTerminal } from "./CommandTerminal";
 import { Menu, Terminal, X, ChevronDown, ChevronUp, Mail, FileText } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import { contactInfo, aboutMe } from "../data/portfolioData";
 
 const GithubIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -43,7 +44,7 @@ const LinkedinIcon = (props: React.SVGProps<SVGSVGElement>) => (
 export default function PortfolioWorkspace() {
   const [openFiles, setOpenFiles] = useState<string[]>(["about_me.json", "skills.ts", "experience.json"]);
   const [activeFileId, setActiveFileId] = useState<string>("about_me.json");
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // mobile drawer; the desktop sidebar is always shown
   const [isTerminalExpanded, setIsTerminalExpanded] = useState(true);
 
   const handleSelectFile = (fileId: string) => {
@@ -87,13 +88,22 @@ export default function PortfolioWorkspace() {
           <div className="flex items-center space-x-2.5">
             <span className="w-2.5 h-2.5 rounded-full bg-accent animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.7)]" />
             <h1 className="font-mono text-xs font-bold uppercase tracking-wider text-slate-200">
-              {aboutMe.name} <span className="text-slate-400 font-normal">| CyberOS Workspace</span>
+              {aboutMe.name}
             </h1>
           </div>
         </div>
 
         {/* Quick Links & Status Badge */}
         <div className="flex items-center space-x-3 sm:space-x-4">
+          {/* Way out for non-technical visitors (business owners) to the plain-language site */}
+          <Link
+            href="/studio"
+            className="inline-flex items-center px-2.5 py-1 rounded-full border border-slate-700 hover:border-accent/50 text-[11px] font-sans text-slate-300 hover:text-white transition-colors whitespace-nowrap"
+          >
+            <span className="hidden lg:inline">Not a developer?&nbsp;</span>
+            <span className="lg:hidden">Simple site&nbsp;</span>
+            <span className="hidden lg:inline">Simple version&nbsp;</span>→
+          </Link>
           <button
             onClick={() => handleSelectFile("resume.md")}
             className="hidden md:flex items-center space-x-1.5 px-2.5 py-1 bg-slate-900 border border-card-border/60 hover:border-accent/40 rounded text-xs font-mono text-slate-300 hover:text-accent transition-colors"
@@ -139,7 +149,7 @@ export default function PortfolioWorkspace() {
       {/* Main Workspace Frame */}
       <div className="workspace-main-frame flex-1 flex overflow-hidden relative">
         {/* Sidebar Panel - Desktop Layout */}
-        <div className={`no-print hidden lg:block transition-all duration-300 ${isSidebarOpen ? "w-[250px]" : "w-0"} overflow-hidden shrink-0`}>
+        <div className={`no-print hidden lg:block w-[250px] overflow-hidden shrink-0`}>
           <Sidebar
             activeFileId={activeFileId}
             onSelectFile={handleSelectFile}

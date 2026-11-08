@@ -35,6 +35,13 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Smooth scrolling for in-page links on the /studio page only */
+@media (prefers-reduced-motion: no-preference) {
+  html:has(.studio-page) {
+    scroll-behavior: smooth;
+  }
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -178,35 +185,17 @@ body {
     break-inside: avoid !important;
   }
 
-  /* 6. Force 2-Column layout in print regardless of screen DPI */
-  #resume-sheet .resume-grid-container {
-    display: grid !important;
-    grid-template-columns: 35% 65% !important;
-    width: 100% !important;
-  }
-
-  #resume-sheet .resume-left-col {
-    grid-column: 1 !important;
-    width: 100% !important;
-    border-right: 1px solid #cbd5e1 !important;
-    border-bottom: none !important;
-    padding: 12px 14px !important;
-    background-color: #f8fafc !important;
-  }
-
-  #resume-sheet .resume-right-col {
-    grid-column: 2 !important;
-    width: 100% !important;
-    padding: 12px 14px !important;
+  /* 6. Single-column body and project list (ATS-friendly reading order) */
+  #resume-sheet .resume-body {
+    padding: 10px 16px !important;
     background-color: #ffffff !important;
   }
 
-  /* Force 2-Column project grid on Page 2 */
   #resume-sheet .resume-projects-grid {
     display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    gap: 10px !important;
-    padding: 14px 16px !important;
+    grid-template-columns: 1fr !important;
+    gap: 6px !important;
+    padding: 10px 16px !important;
   }
 
   /* 7. Typography and Colors */
@@ -292,6 +281,11 @@ body {
   #resume-sheet .resume-project-card {
     background-color: #ffffff !important;
     border: 1px solid #e2e8f0 !important;
+    padding: 7px 10px !important;
+  }
+
+  #resume-sheet .resume-project-card > * + * {
+    margin-top: 4px !important;
   }
 }
 
