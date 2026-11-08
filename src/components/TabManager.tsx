@@ -50,6 +50,7 @@ export const TabManager: React.FC<TabManagerProps> = ({
               </span>
               <button
                 onClick={(e) => onCloseFile(fileId, e)}
+                aria-label={`Close ${fileId}`}
                 className={`ml-2.5 p-0.5 rounded-sm opacity-60 group-hover:opacity-100 hover:bg-accent/10 hover:text-accent transition-colors`}
               >
                 <X size={10} />

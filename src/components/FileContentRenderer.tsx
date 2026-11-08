@@ -412,10 +412,10 @@ export const skills: { category: string; items: Skill[] }[] = ${JSON.stringify(s
 
                     {/* Quick Highlights */}
                     <div className="glassmorphism p-6 rounded-xl">
-                      <h3 className="text-sm font-semibold text-slate-200 mb-4 uppercase tracking-wider font-mono flex items-center space-x-2">
+                      <h2 className="text-sm font-semibold text-slate-200 mb-4 uppercase tracking-wider font-mono flex items-center space-x-2">
                         <Award size={15} className="text-accent" />
                         <span>Core Engineering Principles</span>
-                      </h3>
+                      </h2>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono text-slate-300">
                         <div className="flex items-center space-x-2 p-2 rounded bg-slate-900/40 border border-slate-800/60">
                           <CheckCircle2 size={14} className="text-accent shrink-0" />
@@ -462,10 +462,10 @@ export const skills: { category: string; items: Skill[] }[] = ${JSON.stringify(s
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {skills.map((group) => (
                       <div key={group.category} className="glassmorphism p-6 rounded-xl">
-                        <h3 className="text-sm font-semibold text-slate-200 font-mono mb-4 border-b border-card-border pb-2 flex items-center">
+                        <h2 className="text-sm font-semibold text-slate-200 font-mono mb-4 border-b border-card-border pb-2 flex items-center">
                           <Code2 size={16} className="text-accent mr-2" />
                           {group.category}
-                        </h3>
+                        </h2>
                         <div className="space-y-4">
                           {group.items.map((skill) => (
                             <div key={skill.name} className="space-y-1.5">

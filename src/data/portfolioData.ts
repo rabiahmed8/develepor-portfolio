@@ -104,6 +104,7 @@ export const skills: SkillGroup[] = [
     items: [
       { name: "PostgreSQL (neon db, Supabase)", level: 88, icon: "Database" },
       { name: "MySQL", level: 82, icon: "Database" },
+      { name: "MongoDB", level: 80, icon: "Database" },
       { name: "Prisma ORM", level: 90, icon: "Database" },
       { name: "TypeORM", level: 82, icon: "Database" }
     ]
@@ -321,7 +322,7 @@ export const projects: Project[] = [
     repoNote: "Company proprietary repository (private)",
     highlights: [
       "Translated intricate Figma mockups into responsive, fluid Next.js components with zero visual compromises",
-      "Attained 95+ Google Lighthouse scores across Performance, Accessibility, and SEO",
+      "Optimized for Core Web Vitals with strong Lighthouse scores in Accessibility and SEO at launch",
       "Integrated smooth micro-interactions and interactive page transitions using Framer Motion"
     ]
   },

@@ -261,6 +261,7 @@ export const CommandTerminal: React.FC<CommandTerminalProps> = ({ onOpenFile }) 
             value={inputVal}
             onChange={(e) => setInputVal(e.target.value)}
             onKeyDown={handleKeyDown}
+            aria-label="Terminal command"
             className="w-full bg-transparent outline-none border-none text-slate-200"
             autoFocus
             autoComplete="off"

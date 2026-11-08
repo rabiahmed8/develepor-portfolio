@@ -78,6 +78,7 @@ export default function PortfolioWorkspace() {
         <div className="flex items-center space-x-3">
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            aria-label={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
             className="p-1 rounded-md text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 lg:hidden transition-colors"
           >
             {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
@@ -86,7 +87,7 @@ export default function PortfolioWorkspace() {
           <div className="flex items-center space-x-2.5">
             <span className="w-2.5 h-2.5 rounded-full bg-accent animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.7)]" />
             <h1 className="font-mono text-xs font-bold uppercase tracking-wider text-slate-200">
-              {aboutMe.name} <span className="text-slate-500 font-normal">| CyberOS Workspace</span>
+              {aboutMe.name} <span className="text-slate-400 font-normal">| CyberOS Workspace</span>
             </h1>
           </div>
         </div>
