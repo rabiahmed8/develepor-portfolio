@@ -13,6 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://rabiahmed-portfolio.vercel.app"),
   title: "Rabi Ahmed | Full-Stack Software Developer Portfolio",
   description: "Interactive IDE developer portfolio for Rabi Ahmed, Full-Stack Software Developer based in Karachi, Pakistan. Specializing in Next.js, React, TypeScript, Node.js, and PostgreSQL.",
   keywords: ["Rabi Ahmed", "Full-Stack Developer", "Next.js", "TypeScript", "React", "Node.js", "PostgreSQL", "Portfolio", "Karachi"],
@@ -21,11 +22,12 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Rabi Ahmed | Full-Stack Software Developer Portfolio",
     description: "Interactive IDE developer portfolio for Rabi Ahmed. Specializing in Next.js, React, TypeScript, Node.js, and PostgreSQL.",
-    url: "https://github.com/rabiahmed8",
+    url: "/",
     siteName: "Rabi Ahmed Portfolio",
     locale: "en_US",
     type: "website",
   },
+  twitter: { card: "summary_large_image" },
   icons: {
     icon: "/icon.svg",
     shortcut: "/icon.svg",

@@ -1,42 +1,65 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, Bot, CalendarCheck, Gauge, Mail, MessageCircle, Smartphone } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Bot, CalendarCheck, Gauge, LayoutDashboard, Mail, MessageCircle, Smartphone, Wrench } from "lucide-react";
+import EnquiryForm from "@/components/studio/EnquiryForm";
 import SceneLoader from "@/components/studio/SceneLoader";
 import { studioProjects } from "@/components/studio/studioData";
 import { contactInfo } from "@/data/portfolioData";
 
+const description =
+  "New websites, redesigns, bug fixes, online booking, custom web apps and AI assistants for businesses. Clients in Australia, the US and Europe. Free homepage mockup before you pay anything.";
+
 export const metadata: Metadata = {
-  title: "Rabi Ahmed | Websites & AI tools for businesses",
-  description:
-    "I design and build fast, modern websites, online booking and AI assistants for businesses. Clients in Australia, the US and Europe. Free homepage mockup before you pay anything.",
+  title: "Rabi Ahmed | Websites, web apps & fixes for businesses",
+  description,
+  alternates: { canonical: "/studio" },
+  openGraph: {
+    title: "Rabi Ahmed | Websites, web apps & fixes for businesses",
+    description,
+    url: "/studio",
+    siteName: "Rabi Ahmed",
+    type: "website",
+  },
 };
 
-const whatsapp = `https://wa.me/${contactInfo.phone.replace(/\D/g, "")}`;
-const mockupMail = `mailto:${contactInfo.email}?subject=${encodeURIComponent("Free homepage mockup")}&body=${encodeURIComponent(
+// The WhatsApp button is the only public place this number appears. It is kept out of the shared
+// contact data on purpose, so it never shows up on the CV page or in the developer version.
+const whatsapp = "https://wa.me/923121120251";
+const mockupMail = `mailto:${contactInfo.email}?subject=${encodeURIComponent("Website enquiry")}&body=${encodeURIComponent(
   "Hi Rabi,\n\nMy business: \nMy current website (if any): \nWhat I'd like help with: \n"
 )}`;
 
 const services = [
   {
     icon: Smartphone,
-    title: "A website that works on phones",
-    text: "A new site or a redesign. Clear prices, opening hours, photos, and a contact button people can actually find.",
+    title: "A new website, or a redesign",
+    text: "Built from scratch or rebuilt from the one you have. Clear prices, opening hours, photos, and a contact button people can actually find, on phones first.",
+  },
+  {
+    icon: Wrench,
+    title: "Fixes & small changes",
+    text: "A form that doesn’t send, a page that looks wrong on phones, a feature someone left half-finished. Tell me what’s broken and I’ll sort it out, whoever built the site.",
   },
   {
     icon: CalendarCheck,
-    title: "Online booking & quotes",
+    title: "Online booking, payments & quotes",
     text: "Let customers book, request a quote or pay online, with a simple dashboard where you see everything.",
+  },
+  {
+    icon: LayoutDashboard,
+    title: "Custom web apps",
+    text: "Customer portals, admin dashboards, directories, job boards. If a spreadsheet is running part of your business, it can probably be a proper tool.",
   },
   {
     icon: Bot,
     title: "AI that answers for you",
-    text: "A chat or voice assistant that answers common questions and takes enquiries, even when you're closed.",
+    text: "A chat or voice assistant that answers common questions and takes enquiries, even when you’re closed.",
   },
   {
     icon: Gauge,
-    title: "Speed & Google fixes",
-    text: "Already have a site? I'll make it load faster and help it show up better when people search for you.",
+    title: "Speed & Google",
+    text: "I make slow sites load faster and help them show up better when people search for you.",
   },
 ];
 
@@ -65,7 +88,7 @@ export default function StudioPage() {
             href="#contact"
             className="rounded-full bg-[#16171d] px-4 py-2 text-sm font-medium text-white transition hover:bg-emerald-700"
           >
-            Free mockup
+            Get in touch
           </a>
         </nav>
       </header>
@@ -86,8 +109,8 @@ export default function StudioPage() {
                 Websites that bring you <span className="text-emerald-700">customers</span>, not headaches.
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-black/70">
-                I design and build fast, modern websites and online booking for businesses, and add AI assistants that
-                answer your customers for you. I’ve worked with clients in Australia, the US and Europe.
+                I build new websites, fix and improve existing ones, and add online booking, custom tools and AI
+                assistants. One developer for all of it, with clients in Australia, the US and Europe.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <a
@@ -104,9 +127,9 @@ export default function StudioPage() {
                 </a>
               </div>
               <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-black/60">
+                <li>✓ New sites &amp; redesigns</li>
+                <li>✓ Fixes &amp; features</li>
                 <li>✓ Free mockup first</li>
-                <li>✓ Built for phones</li>
-                <li>✓ Fast to load</li>
               </ul>
             </div>
             <div className="relative min-w-0 h-[340px] sm:h-[440px] lg:-mr-10 lg:h-[540px]">
@@ -174,7 +197,10 @@ export default function StudioPage() {
         <section id="services" className="scroll-mt-20 py-20">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">What I can do for you</h2>
-            <div className="mt-12 grid gap-5 sm:grid-cols-2">
+            <p className="mt-3 max-w-2xl text-black/65">
+              Big or small. A whole new site, or one annoying bug.
+            </p>
+            <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {services.map(({ icon: Icon, title, text }) => (
                 <div key={title} className="rounded-2xl border border-black/10 bg-white p-6">
                   <div className="mb-4 grid h-11 w-11 place-items-center rounded-xl bg-emerald-100 text-emerald-800">
@@ -231,31 +257,36 @@ export default function StudioPage() {
 
         {/* Contact */}
         <section id="contact" className="scroll-mt-20 px-4 pb-20 sm:px-6">
-          <div className="relative mx-auto max-w-6xl overflow-hidden rounded-3xl bg-emerald-800 px-6 py-14 text-white sm:px-14">
-            <div aria-hidden className="pointer-events-none absolute -bottom-32 -right-24 h-80 w-80 rounded-full bg-emerald-400/30 blur-3xl" />
-            <h2 className="relative max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">
-              Want to see what your new website could look like?
-            </h2>
-            <p className="relative mt-4 max-w-xl text-lg text-white/80">
-              Send me your business name and current website. I’ll make you a free homepage mockup, no strings attached.
-            </p>
-            <div className="relative mt-8 flex flex-col gap-3 sm:flex-row">
-              <a
-                href={mockupMail}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3.5 font-semibold text-emerald-900 transition hover:bg-emerald-50"
-              >
-                <Mail size={18} aria-hidden /> Email me
-              </a>
-              <a
-                href={whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/40 px-6 py-3.5 font-semibold transition hover:bg-white/10"
-              >
-                <MessageCircle size={18} aria-hidden /> Message on WhatsApp
-              </a>
+          <div className="relative mx-auto grid max-w-6xl gap-10 overflow-hidden rounded-3xl bg-emerald-800 px-5 py-12 text-white sm:px-10 lg:grid-cols-[1fr_1.1fr] lg:gap-14 lg:px-14 lg:py-16">
+            <div aria-hidden className="pointer-events-none absolute -bottom-32 -left-24 h-80 w-80 rounded-full bg-emerald-400/30 blur-3xl" />
+            <div className="relative">
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Tell me what you need.</h2>
+              <p className="mt-4 text-lg text-white/80">
+                A new website, a fix, a feature, or just a question. If you want a new look, I’ll make you a free
+                homepage mockup first, no strings attached.
+              </p>
+              <p className="mt-8 text-sm text-white/70">Prefer to talk directly?</p>
+              <div className="mt-3 flex flex-col gap-3 sm:flex-row lg:flex-col xl:flex-row">
+                <a
+                  href={mockupMail}
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/40 px-5 py-3 font-semibold transition hover:bg-white/10"
+                >
+                  <Mail size={18} aria-hidden /> Email me
+                </a>
+                <a
+                  href={whatsapp}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/40 px-5 py-3 font-semibold transition hover:bg-white/10"
+                >
+                  <MessageCircle size={18} aria-hidden /> Message on WhatsApp
+                </a>
+              </div>
+              <p className="mt-5 break-all text-sm text-white/70">{contactInfo.email}</p>
             </div>
-            <p className="relative mt-6 text-sm text-white/70">{contactInfo.email}</p>
+            <div className="relative min-w-0">
+              <EnquiryForm email={contactInfo.email} whatsapp={whatsapp} />
+            </div>
           </div>
         </section>
       </main>
