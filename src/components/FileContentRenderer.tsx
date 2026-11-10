@@ -355,9 +355,8 @@ export const skills: { category: string; items: Skill[] }[] = ${JSON.stringify(s
               {fileId === "contact_info.yaml" &&
                 renderEditorPanel(
                   `contact:
-  name: "${contactInfo.email}"
+  name: "Rabi Ahmed"
   email: "${contactInfo.email}"
-  phone: "${contactInfo.phone}"
   location: "${contactInfo.location}"
   socials:
     github: "${contactInfo.github}"

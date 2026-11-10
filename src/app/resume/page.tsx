@@ -29,7 +29,9 @@ export default function ResumePage() {
 
       {/* Standalone Resume Document */}
       <main className="w-full flex justify-center">
-        <ResumeDocument showControls={true} />
+        {/* RESUME_PHONE is set only in the local .env, so the number appears in PDFs made on this
+            computer and never on the deployed site. */}
+        <ResumeDocument showControls={true} phone={process.env.RESUME_PHONE || undefined} />
       </main>
     </div>
   );

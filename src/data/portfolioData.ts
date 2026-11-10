@@ -35,7 +35,6 @@ export interface ExperienceItem {
 
 export interface ContactInfo {
   email: string;
-  phone: string;
   location: string;
   github: string;
   linkedin: string;
@@ -347,7 +346,6 @@ export const projects: Project[] = [
 
 export const contactInfo: ContactInfo = {
   email: "ahmedrabi8@gmail.com",
-  phone: "+92 312 1120251",
   location: "Karachi, Pakistan",
   portfolio: "https://rabiahmed-portfolio.vercel.app/",
   github: "https://github.com/rabiahmed8",

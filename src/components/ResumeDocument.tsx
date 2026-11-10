@@ -53,9 +53,11 @@ const LinkedinIcon = (props: React.SVGProps<SVGSVGElement>) => (
 
 interface ResumeDocumentProps {
   showControls?: boolean;
+  /** Shown in the contact row only when provided. Left out on the public site. */
+  phone?: string;
 }
 
-export const ResumeDocument: React.FC<ResumeDocumentProps> = ({ showControls = true }) => {
+export const ResumeDocument: React.FC<ResumeDocumentProps> = ({ showControls = true, phone }) => {
   const [themeMode, setThemeMode] = useState<"cyber" | "paper">("paper");
 
   const handlePrint = () => {
@@ -189,16 +191,15 @@ export const ResumeDocument: React.FC<ResumeDocumentProps> = ({ showControls = t
                   </a>
                 </div>
 
-                {/* Clickable Phone */}
-                <div className="flex items-center space-x-1.5">
-                  <Phone size={12} className={`shrink-0 ${isCyber ? "text-accent" : "text-emerald-700"}`} />
-                  <a
-                    href={`tel:${contactInfo.phone.replace(/\s+/g, "")}`}
-                    className="hover:underline"
-                  >
-                    {contactInfo.phone}
-                  </a>
-                </div>
+                {/* Phone: only when one is passed in (never on the public site) */}
+                {phone && (
+                  <div className="flex items-center space-x-1.5">
+                    <Phone size={12} className={`shrink-0 ${isCyber ? "text-accent" : "text-emerald-700"}`} />
+                    <a href={`tel:${phone.replace(/\s+/g, "")}`} className="hover:underline">
+                      {phone}
+                    </a>
+                  </div>
+                )}
 
                 {/* Location */}
                 <div className="flex items-center space-x-1.5">
